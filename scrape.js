@@ -30,6 +30,7 @@ async function scraper(myPlace, keyword, result) {
     viewAdCount = _.countBy(_.map(viewRanks, (viewRank) => viewRank.isAd), (a) => a).true ?? 0;
 
     result.keyword.push({
+        lastUpdateTime: new Date(),
         name: keyword,
         dataRank: _.find(dataRanks, (dataRank) => {
             return _.includes(dataRank.name, myPlace);
