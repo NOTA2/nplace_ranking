@@ -1,0 +1,27 @@
+{
+    "myPlace": "엘바노헤어",
+    "keyword": [
+        {
+            "name": "세교미용실",
+            "viewAdCount": 0
+        },
+        {
+            "name": "궐동미용실",
+            "dataRank": "1",
+            "viewRankWithAd": 3,
+            "viewAdCount": 2
+        },
+        {
+            "name": "오산대역미용실",
+            "dataRank": "1",
+            "viewRankWithAd": 3,
+            "viewAdCount": 2
+        },
+        {
+            "name": "오산미용실",
+            "dataRank": "2",
+            "viewRankWithAd": 4,
+            "viewAdCount": 2
+        }
+    ]
+}

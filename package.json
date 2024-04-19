@@ -1,0 +1,17 @@
+{
+  "name": "nplace_ranking",
+  "version": "1.0.0",
+  "description": "nplace_ranking",
+  "main": "index.js",
+  "scripts": {
+    "build": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^1.6.8",
+    "cheerio": "^1.0.0-rc.12",
+    "lodash": "^4.17.21"
+  }
+}
