@@ -38,3 +38,7 @@ jobs:
       with:
         branch: 'master'
         github_token: ${{ secrets.GH_TOKEN }}
+  call-real-cluster-pipeline:
+    needs: Deploy static content to Pages
+    secrets: inherit
+    uses: ./.github/workflows/static.yaml

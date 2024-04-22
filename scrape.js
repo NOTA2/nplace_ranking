@@ -14,7 +14,7 @@ async function scraper(myPlace, keyword, result) {
     const dataResponse = await axios.get(encodeURI('https://map.naver.com/p/api/search/allSearch?query=' + keyword + '&type=all&searchCoord='));
     const dataRanks = dataResponse.data.result.place.list;
 
-    const viewResponse = await axios.get(encodeURI('https://pcmap.place.naver.com/hairshop/list?x=126.854528&y=37.5067055&fromNxList=true&entry=pll&query=' + keyword));
+    const viewResponse = await axios.get(encodeURI('https://pcmap.place.naver.com/hairshop/list?query=' + keyword));
     const $ = cheerio.load(viewResponse.data);
     const viewData = $('#_pcmap_list_scroll_container > ul > li')
     const viewRanks = [];
