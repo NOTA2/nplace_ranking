@@ -1,6 +1,6 @@
 {
     "myPlace": "엘바노헤어",
-    "lastUpdateTime": "2024-04-22T17:14:03.515Z",
+    "lastUpdateTime": "2024-04-22T17:29:36.966Z",
     "keyword": [
         {
             "name": "궐동미용실",
@@ -12,6 +12,12 @@
             "name": "오산미용실",
             "dataRank": "2",
             "viewRankWithAd": 2,
+            "viewAdCount": 0
+        },
+        {
+            "name": "오산대역미용실",
+            "dataRank": "1",
+            "viewRankWithAd": 1,
             "viewAdCount": 0
         }
     ]
