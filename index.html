@@ -30,14 +30,14 @@
         }
 
         function getRanking(keyword) {
-            keyword.map(k => `
+            return keyword.map(k => `
                 <li>키워드 : ${k.name}</li>
                 <ul>
                     <li>데이터 순위 : ${k.dataRank}</li>
                     <li>광고를 포함한 노출 순위 : ${k.viewRankWithAd}</li>
                     <li>키워드 광고 갯수 : ${k.viewAdCount}</li>
                 </ul>
-            `)
+            `).join('')
         }
 
         function displayItem(result) {
