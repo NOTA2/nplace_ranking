@@ -5,7 +5,7 @@ name: Run Scraper - Update data # 워크플로우 이름 지정
 
 on:
   schedule:
-    - cron:  '0 8 * * *' # 주기적으로 실행하기 위한 스케줄링 - cron 설정
+    - cron: '0 8 * * *' # 주기적으로 실행하기 위한 스케줄링 - cron 설정
   workflow_dispatch:
 
 jobs:
@@ -37,4 +37,4 @@ jobs:
       uses: NOTA2/nplace_ranking@master
       with:
         branch: 'master'
-        github_token: $ 
+        github_token: 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
