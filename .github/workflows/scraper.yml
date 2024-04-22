@@ -41,4 +41,4 @@ jobs:
   Deploy static content to Pages:
     needs: build
     secrets: inherit
-    uses: ./.github/workflows/static.yaml
+    uses: .github/workflows/static.yaml
