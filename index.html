@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>nPlace-Ranking</title>
+</head>
+<body>
+    <h1>nPlace-Ranking</h1>
+    <div id="jsonContent"></div>
+
+    <script>
+        // Function to fetch JSON files asynchronously
+        async function fetchJSONFiles() {
+            const jsonFolder = './json/';
+            const response = await fetch(jsonFolder);
+            const files = await response.json();
+            const promises = files.map(async (file) => {
+                try {
+                    const response = await fetch(jsonFolder + file);
+                    const data = await response.json();
+                    return { file, data };
+                } catch (error) {
+                    return { file, error: 'Failed to load JSON file' };
+                }
+            });
+            return Promise.all(promises);
+        }
+
+        // Function to display JSON content on the webpage
+        async function displayJSONContent() {
+            const jsonContentDiv = document.getElementById('jsonContent');
+            jsonContentDiv.innerHTML = '<p>불러오는 중...</p>';
+            
+            try {
+                const jsonData = await fetchJSONFiles();
+                jsonContentDiv.innerHTML = '';
+                console.log(jsonData)
+                jsonData.forEach(({ file, data, error }) => {
+                    const fileHeading = document.createElement('h2');
+                    fileHeading.textContent = file;
+                    jsonContentDiv.appendChild(fileHeading);
+
+                    if (data) {
+                        const pre = document.createElement('pre');
+                        pre.textContent = JSON.stringify(data, null, 2);
+                        jsonContentDiv.appendChild(pre);
+                    } else if (error) {
+                        const errorPara = document.createElement('p');
+                        errorPara.textContent = `${file}: ${error}`;
+                        jsonContentDiv.appendChild(errorPara);
+                    }
+                });
+            } catch (error) {
+                jsonContentDiv.innerHTML = '<p>Failed to load JSON files.</p>';
+            }
+        }
+
+        // Call function to display JSON content when the page loads
+        window.onload = displayJSONContent;
+    </script>
+</body>
+</html>
