@@ -7,57 +7,55 @@
 </head>
 <body>
     <h1>nPlace-Ranking</h1>
-    <div id="jsonContent"></div>
+    <div id="result"></div>
 
     <script>
-        // Function to fetch JSON files asynchronously
-        async function fetchJSONFiles() {
-            const jsonFolder = './json/';
-            const response = await fetch(jsonFolder);
-            const files = await response.json();
-            const promises = files.map(async (file) => {
-                try {
-                    const response = await fetch(jsonFolder + file);
-                    const data = await response.json();
-                    return { file, data };
-                } catch (error) {
-                    return { file, error: 'Failed to load JSON file' };
-                }
-            });
-            return Promise.all(promises);
+        function loadItem() {
+            return fetch('./json/알바노헤어.json')
+                .then((response) => response.json())
         }
 
-        // Function to display JSON content on the webpage
-        async function displayJSONContent() {
-            const jsonContentDiv = document.getElementById('jsonContent');
-            jsonContentDiv.innerHTML = '<p>불러오는 중...</p>';
-            
-            try {
-                const jsonData = await fetchJSONFiles();
-                jsonContentDiv.innerHTML = '';
-                console.log(jsonData)
-                jsonData.forEach(({ file, data, error }) => {
-                    const fileHeading = document.createElement('h2');
-                    fileHeading.textContent = file;
-                    jsonContentDiv.appendChild(fileHeading);
-
-                    if (data) {
-                        const pre = document.createElement('pre');
-                        pre.textContent = JSON.stringify(data, null, 2);
-                        jsonContentDiv.appendChild(pre);
-                    } else if (error) {
-                        const errorPara = document.createElement('p');
-                        errorPara.textContent = `${file}: ${error}`;
-                        jsonContentDiv.appendChild(errorPara);
-                    }
-                });
-            } catch (error) {
-                jsonContentDiv.innerHTML = '<p>Failed to load JSON files.</p>';
-            }
+        // 0을 추가하는 보조 함수입니다.
+        function addZero(num) {
+            return (num < 10 ? '0' : '') + num;
         }
 
-        // Call function to display JSON content when the page loads
-        window.onload = displayJSONContent;
+        function getFormattedDate(d) {
+            return d.getFullYear() + '-' + 
+                addZero((d.getMonth() + 1)) + '-' + 
+                addZero(d.getDate()) + ' ' + 
+                addZero(d.getHours()) + ':' + 
+                addZero(d.getMinutes()) + ':' + 
+                addZero(d.getSeconds());
+        }
+
+        function getRanking(keyword) {
+            keyword.map(k => `
+                <li>키워드 : ${k.name}</li>
+                <ul>
+                    <li>데이터 순위 : ${k.dataRank}</li>
+                    <li>광고를 포함한 노출 순위 : ${k.viewRankWithAd}</li>
+                    <li>키워드 광고 갯수 : ${k.viewAdCount}</li>
+                </ul>
+            `)
+        }
+
+        function displayItem(result) {
+            const container = document.getElementById('#result');
+
+            container.innerHTML = `
+                <h2>내 가게 : ${result.myPlace}</h2>
+                <h3>업데이트 시각 : ${getFormattedDate(result.lastUpdateTime)}</h2>
+                <ul>
+                    ${getRanking(result.keyword)}
+                </ul>
+            `
+        }
+
+        loadItem().then(result => {
+            console.log(result)
+            displayItem(result)
+        })
     </script>
 </body>
 </html>
