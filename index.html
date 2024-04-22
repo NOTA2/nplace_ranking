@@ -33,9 +33,9 @@
             return keyword.map(k => `
                 <li>키워드 : ${k.name}</li>
                 <ul>
-                    <li>데이터 순위 : ${k.dataRank}</li>
-                    <li>광고를 포함한 노출 순위 : ${k.viewRankWithAd}</li>
-                    <li>키워드 광고 갯수 : ${k.viewAdCount}</li>
+                    <li>데이터 순위 : ${k.dataRank ? k.dataRank + '위' : '20위 밖🥲'}</li>
+                    <li>광고를 포함한 노출 순위 : ${k.viewRankWithAd ? k.viewRankWithAd + '위' : '20위 밖🥲'}</li>
+                    <li>키워드 광고 갯수 : ${k.viewAdCount}건</li>
                 </ul>
             `).join('')
         }
