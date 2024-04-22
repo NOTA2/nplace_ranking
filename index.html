@@ -41,7 +41,7 @@
         }
 
         function displayItem(result) {
-            const container = document.getElementById('#result');
+            const container = document.getElementById('result');
 
             container.innerHTML = `
                 <h2>내 가게 : ${result.myPlace}</h2>
@@ -53,7 +53,6 @@
         }
 
         loadItem().then(result => {
-            console.log(result)
             displayItem(result)
         })
     </script>
