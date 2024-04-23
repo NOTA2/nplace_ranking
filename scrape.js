@@ -2,7 +2,8 @@ const axios = require('axios');
 const cheerio = require('cheerio');
 const fs = require('fs');
 const path = require('path');
-var _ = require('lodash');
+const _ = require('lodash');
+const puppeteer = require('puppeteer')
 
 const searchItems = [{
     myPlace: '엘바노헤어',
@@ -11,11 +12,22 @@ const searchItems = [{
 
 async function scraper(myPlace, keyword, result) {
   try {
-    const dataResponse = await axios.get(encodeURI('https://map.naver.com/p/api/search/allSearch?query=' + keyword + '&type=all&searchCoord='));
-    const dataRanks = dataResponse.data.result.place.list;
+    // const dataResponse = await axios.get(encodeURI('https://map.naver.com/p/api/search/allSearch?query=' + keyword + '&type=all&searchCoord='));
+    const dataResponse = await fetch(encodeURI('https://map.naver.com/p/api/search/allSearch?query=' + keyword + '&type=all&searchCoord='))
+        .then((response) => response.json())
+
+    const dataRanks = dataResponse.result.place.list;
+
+    // const browser = await puppeteer.launch();
+    // const page = await browser.newPage();
+    // await page.goto(encodeURI('https://pcmap.place.naver.com/hairshop/list?query=' + keyword));
+    // const content = await page.content();
+    // const $ = cheerio.load(content);
 
     const viewResponse = await axios.get(encodeURI('https://pcmap.place.naver.com/hairshop/list?query=' + keyword));
     const $ = cheerio.load(viewResponse.data);
+
+
     const viewData = $('#_pcmap_list_scroll_container > ul > li')
     const viewRanks = [];
 
@@ -42,6 +54,8 @@ async function scraper(myPlace, keyword, result) {
 
     await fs.writeFileSync(path.join(__dirname+'/json', myPlace+'.json'), JSON.stringify(result, null, 4))
 
+    // await page.close();
+    // await browser.close();
   } catch (error) {
     console.error('An error occurred during scraping:', error);
   }
@@ -55,5 +69,6 @@ _.forEach(searchItems, (searchItem) => {
     }
     _.forEach(searchItem.keywords, (keyword) => {
         scraper(searchItem.myPlace, keyword, result)
+        // setTimeout(() => {}, 2000);
     })
 })
