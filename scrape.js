@@ -12,11 +12,12 @@ const searchItems = [{
 
 async function scraper(myPlace, keyword, result) {
   try {
-    // const dataResponse = await axios.get(encodeURI('https://map.naver.com/p/api/search/allSearch?query=' + keyword + '&type=all&searchCoord='));
-    const dataResponse = await fetch(encodeURI('https://map.naver.com/p/api/search/allSearch?query=' + keyword + '&type=all&searchCoord='))
-        .then((response) => response.json())
-
-    const dataRanks = dataResponse.result.place.list;
+    const dataResponse = await axios.get(encodeURI('https://map.naver.com/p/api/search/allSearch?query=' + keyword + '&type=all&searchCoord='));
+    const dataRanks = dataResponse.data.result.place.list;
+    
+    // const dataResponse = await fetch(encodeURI('https://map.naver.com/p/api/search/allSearch?query=' + keyword + '&type=all&searchCoord='))
+    //     .then((response) => response.json())
+    // const dataRanks = dataResponse.result.place.list;
 
     // const browser = await puppeteer.launch();
     // const page = await browser.newPage();
@@ -69,6 +70,6 @@ _.forEach(searchItems, (searchItem) => {
     }
     _.forEach(searchItem.keywords, (keyword) => {
         scraper(searchItem.myPlace, keyword, result)
-        // setTimeout(() => {}, 2000);
+        setTimeout(() => {}, 2000);
     })
 })
