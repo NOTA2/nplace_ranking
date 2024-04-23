@@ -1,27 +1,27 @@
 {
     "myPlace": "엘바노헤어",
-    "lastUpdateTime": "2024-04-23T05:48:41.746Z",
-    "keyword": [
+    "lastUpdateTime": "2024-04-23T06:06:07.183Z",
+    "keywords": [
+        {
+            "name": "오산미용실",
+            "dataRank": "2",
+            "viewRankWithAd": 4,
+            "viewAdCount": 2
+        },
         {
             "name": "궐동미용실",
             "dataRank": "1",
-            "viewRankWithAd": 1,
-            "viewAdCount": 0
-        },
-        {
-            "name": "세교미용실",
-            "viewAdCount": 0
+            "viewRankWithAd": 3,
+            "viewAdCount": 2
         },
         {
             "name": "오산대역미용실",
             "dataRank": "1",
-            "viewRankWithAd": 1,
-            "viewAdCount": 0
+            "viewRankWithAd": 2,
+            "viewAdCount": 1
         },
         {
-            "name": "오산미용실",
-            "dataRank": "2",
-            "viewRankWithAd": 2,
+            "name": "세교미용실",
             "viewAdCount": 0
         }
     ]
