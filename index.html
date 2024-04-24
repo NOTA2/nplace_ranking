@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>nPlace-Ranking</title>
     <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.5.0/dist/semantic.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/semantic-ui@2.5.0/dist/semantic.min.css" rel="stylesheet">
 </head>
 <body>
     <h1>nPlace-Ranking</h1>
@@ -30,14 +32,24 @@
                 addZero(d.getSeconds());
         }
 
+        function getRankingString(rank) {
+            let str = rank + '위'
+            switch (parseInt(rank)) {
+                case 1 : str = '🥇'; break
+                case 2 : str = '🥈'; break
+                case 3 : str = '🥉'; break
+            }
+            return str;
+        }
+
         function getRanking(keyword) {
             return keyword.map(k => `
-                <li>키워드 : ${k.name}</li>
-                <ul>
-                    <li>데이터 순위 : ${k.dataRank ? k.dataRank + '위' : '20위 밖🥲'}</li>
-                    <li>광고를 포함한 노출 순위 : ${k.viewRankWithAd ? k.viewRankWithAd + '위' : '10위 밖🥲'}</li>
-                    <li>키워드 광고 갯수 : ${k.viewAdCount}건</li>
-                </ul>
+                <tr>
+                  <td>${k.name}</td>
+                  <td>${k.dataRank ? getRankingString(k.dataRank) : '20위 밖🥲'}</td>
+                  <td>${k.viewRankWithAd ? getRankingString(k.viewRankWithAd) : '10위 밖🥲'}</td>
+                  <td>${k.viewAdCount}건</td>
+                </tr>
             `).join('')
         }
 
@@ -47,9 +59,15 @@
             container.innerHTML = `
                 <h2>내 가게 : ${result.myPlace}</h2>
                 <h3>업데이트 시각 : ${getFormattedDate(new Date(result.lastUpdateTime))}</h3>
-                <ul>
+                <table>
+                    <tr>
+                      <th scope="col">키워드</th>
+                      <th scope="col">데이터 순위</th>
+                      <th scope="col">노출 순위</th>
+                      <th scope="col">광고 개수</th>
+                    </tr>
                     ${getRanking(result.keywords)}
-                </ul>
+                  </table>
             `
         }
 
