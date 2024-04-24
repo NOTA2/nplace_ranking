@@ -34,7 +34,7 @@ async function scraper(myPlace, keyword, result) {
         const page = await browser.newPage();
         await page.setExtraHTTPHeaders({...requestHeaders});
 
-        await page.goto(encodeURI('https://pcmap.place.naver.com/hairshop/list?query=' + keyword));
+        await page.goto(encodeURI(`https://pcmap.place.naver.com/place/list?query=${keyword}&x=126.97824994606611&y=37.56655099999952&clientX=126.97825&clientY=37.566551&bounds=126.97499910874342%3B37.55644736586048%3B126.98171536011563%3B37.576483203449186&ts=1713941267941&mapUrl=https%3A%2F%2Fmap.naver.com%2Fp%2Fsearch%2F${keyword}`));
         await page.waitForSelector(`.place_ad_label_icon`, {timeout: 10_000})
             .catch(() => console.log(keyword + ' is no ad'));
         const content = await page.content();
