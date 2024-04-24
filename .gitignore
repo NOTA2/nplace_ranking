@@ -1,5 +1,8 @@
-/node_modules/
+/**/*.iml
+/**/.idea
+/.run
 
+/node_modules/
 
 !/.gitignore
 !/.github
