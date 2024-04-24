@@ -14,7 +14,10 @@
 </head>
 <body>
     <div class="ui" style="padding:1rem">
-        <h1 style="margin-bottom: 1rem">nPlace-Ranking</h1>
+        <h2 class="ui center aligned icon header">
+            <i class="circular trophy icon"></i>
+            nPlace-Ranking
+        </h2>
         <div id="result" class="ui"></div>
     </div>
 
@@ -63,7 +66,11 @@
             const container = document.getElementById('result');
 
             container.innerHTML = `
-                <h2 class="ui header">내 가게 : ${result.myPlace}</h2>
+                <div class="ui tabular menu">
+                  <a class="item active">
+                    ${result.myPlace}
+                  </a>
+                </div>
                 <table class="ui unstackable table">
                     <thead>
                         <tr>
@@ -76,8 +83,12 @@
                     <tbody>
                         ${getRanking(result.keywords)}
                     </tbody>
-                  </table>
-                <h3 class="ui header">업데이트 시각 : ${getFormattedDate(new Date(result.lastUpdateTime))}</h3>
+                </table>
+                <div class="extra content">
+                  <span class="right floated">
+                    <i class="clock outline icon"></i> 업데이트 시각 : ${getFormattedDate(new Date(result.lastUpdateTime))}
+                  </span>
+                </div>
             `
         }
 
