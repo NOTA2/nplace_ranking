@@ -18,6 +18,8 @@ async function scraper(myPlace, keyword, result) {
         const browser = await puppeteer.launch();
         const page = await browser.newPage();
         await page.goto(encodeURI('https://pcmap.place.naver.com/hairshop/list?query=' + keyword));
+        await page.waitForSelector(`.place_ad_label_icon`, {timeout: 10_000})
+            .catch(() => console.log(keyword + ' is no ad'));
         const content = await page.content();
         const $ = cheerio.load(content);
 
@@ -27,12 +29,10 @@ async function scraper(myPlace, keyword, result) {
         for (i = 0; i < viewData.length; i++) {
             viewRanks.push({
                 rank: i + 1,
-                isAd: _.includes($(viewData[i]).find('a').text(), '광고') ? true : false,
+                isAd: $(viewData[i]).find(`.place_ad_label_icon`).length > 0,
                 name: $(viewData[i]).find('a > div:nth-child(1) > div > span:nth-child(1)').text()
             })
         }
-
-        viewAdCount = _.countBy(_.map(viewRanks, (viewRank) => viewRank.isAd), (a) => a).true ?? 0;
 
         result.keywords.push({
             name: keyword,
@@ -42,9 +42,10 @@ async function scraper(myPlace, keyword, result) {
             viewRankWithAd: _.find(viewRanks, (viewRank) => {
                 return _.includes(viewRank.name, myPlace);
             })?.rank,
-            viewAdCount: viewAdCount
+            viewAdCount: $(viewData).find(`.place_ad_label_icon`).length
         });
 
+        console.log(result)
 
         await fs.writeFileSync(path.join(__dirname + '/json', myPlace + '.json'), JSON.stringify(result, null, 4));
 
