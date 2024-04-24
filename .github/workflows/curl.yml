@@ -28,4 +28,15 @@ jobs:
             -H 'sec-fetch-user: ?1' \
             -H 'upgrade-insecure-requests: 1' \
             -H 'user-agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Whale/3.24.223.24 Safari/537.36' \
-            --compressed
+            -o test
+      - name: Commits
+        run: |
+          git config --local user.email "skaska121212@gmail.com"
+          git config --local user.name "Auto_Scraping_Name" # 커밋에 포함될 이름
+          git add .
+          git commit -m "Auto - Update data with Scraping" # 커밋 메세지
+      - name: Push
+        uses: ad-m/github-push-action@master
+        with:
+          branch: 'master'
+          github_token: ${{ secrets.GH_TOKEN }}
