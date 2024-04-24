@@ -10,6 +10,21 @@ const searchItems = [{
     keywords: ['오산미용실', '궐동미용실', '오산대역미용실', '세교미용실']
 }];
 
+const requestHeaders = {
+    "accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7",
+    "accept-language": "ko-KR,ko;q=0.9,en-US;q=0.8,en;q=0.7,ja;q=0.6",
+    "cache-control": "no-cache",
+    "pragma": "no-cache",
+    "sec-ch-ua": "\"Whale\";v=\"3\", \"Not-A.Brand\";v=\"8\", \"Chromium\";v=\"120\"",
+    "sec-ch-ua-mobile": "?0",
+    "sec-ch-ua-platform": "\"macOS\"",
+    "sec-fetch-dest": "document",
+    "sec-fetch-mode": "navigate",
+    "sec-fetch-site": "same-origin",
+    "sec-fetch-user": "?1",
+    "upgrade-insecure-requests": "1"
+};
+
 async function scraper(myPlace, keyword, result) {
     try {
         const dataResponse = await axios.get(encodeURI('https://map.naver.com/p/api/search/allSearch?query=' + keyword + '&type=all&searchCoord='));
@@ -17,6 +32,8 @@ async function scraper(myPlace, keyword, result) {
 
         const browser = await puppeteer.launch();
         const page = await browser.newPage();
+        await page.setExtraHTTPHeaders({...requestHeaders});
+
         await page.goto(encodeURI('https://pcmap.place.naver.com/hairshop/list?query=' + keyword));
         await page.waitForSelector(`.place_ad_label_icon`, {timeout: 10_000})
             .catch(() => console.log(keyword + ' is no ad'));
@@ -44,8 +61,6 @@ async function scraper(myPlace, keyword, result) {
             })?.rank,
             viewAdCount: $(viewData).find(`.place_ad_label_icon`).length
         });
-
-        console.log(result)
 
         await fs.writeFileSync(path.join(__dirname + '/json', myPlace + '.json'), JSON.stringify(result, null, 4));
 
