@@ -4,13 +4,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>nPlace-Ranking</title>
+    <script
+            src="https://code.jquery.com/jquery-3.1.1.min.js"
+            integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
+            crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.5.0/dist/semantic.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/semantic-ui@2.5.0/dist/semantic.min.css" rel="stylesheet">
 </head>
 <body>
-    <h1>nPlace-Ranking</h1>
-    <div id="result"></div>
+    <div class="ui" style="padding:1rem">
+        <h1>nPlace-Ranking</h1>
+        <div id="result" class="ui grid"></div>
+    </div>
 
     <script>
         function loadItem() {
@@ -57,16 +63,20 @@
             const container = document.getElementById('result');
 
             container.innerHTML = `
-                <h2>내 가게 : ${result.myPlace}</h2>
-                <h3>업데이트 시각 : ${getFormattedDate(new Date(result.lastUpdateTime))}</h3>
-                <table>
-                    <tr>
-                      <th scope="col">키워드</th>
-                      <th scope="col">데이터 순위</th>
-                      <th scope="col">노출 순위</th>
-                      <th scope="col">광고 개수</th>
-                    </tr>
-                    ${getRanking(result.keywords)}
+                <h2 class="ui header">내 가게 : ${result.myPlace}</h2>
+                <h3 class="ui header">업데이트 시각 : ${getFormattedDate(new Date(result.lastUpdateTime))}</h3>
+                <table class="ui celled table">
+                    <thead>
+                        <tr>
+                          <th scope="col">키워드</th>
+                          <th scope="col">데이터 순위</th>
+                          <th scope="col">노출 순위</th>
+                          <th scope="col">광고 개수</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${getRanking(result.keywords)}
+                    </tbody>
                   </table>
             `
         }
