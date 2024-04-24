@@ -43,7 +43,6 @@ async function scraper(myPlace, keyword, result) {
         await page.goto(encodeURI(`https://pcmap.place.naver.com/place/list?query=${keyword}`));
         await page.waitForSelector(`.place_ad_label_icon`, {timeout: 15_000})
             .catch(() => console.log(keyword + ' is no ad'));
-        await page.screenshot({path: keyword + '.png'}); //스크린샷찍기
 
         const content = await page.content();
         const $ = cheerio.load(content);
@@ -51,7 +50,7 @@ async function scraper(myPlace, keyword, result) {
         const viewData = $('#_pcmap_list_scroll_container > ul > li')
         const viewRanks = [];
 
-        for (i = 0; i < viewData.length; i++) {
+        for (let i = 0; i < viewData.length; i++) {
             viewRanks.push({
                 rank: i + 1,
                 isAd: $(viewData[i]).find(`.place_ad_label_icon`).length > 0,

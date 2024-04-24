@@ -1,0 +1,31 @@
+
+name: CURL
+
+on:
+  workflow_run:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      # Trigger Test repository
+      - name: Send Trigger
+        run: |
+          curl 'https://pcmap.place.naver.com/hairshop/list?query=%EC%98%A4%EC%82%B0%EB%AF%B8%EC%9A%A9%EC%8B%A4' \
+            -H 'authority: pcmap.place.naver.com' \
+            -H 'accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7' \
+            -H 'accept-language: ko-KR,ko;q=0.9,en-US;q=0.8,en;q=0.7,ja;q=0.6' \
+            -H 'cache-control: no-cache' \
+            -H 'cookie: NNB=C6T3K5UTB4UWM; _fwb=248hYSkGY2ycUKzO19H7I3m.1713966999650; wcs_bt=sp_96ae721a4035b8:1713966999' \
+            -H 'pragma: no-cache' \
+            -H 'sec-ch-ua: "Whale";v="3", "Not-A.Brand";v="8", "Chromium";v="120"' \
+            -H 'sec-ch-ua-mobile: ?0' \
+            -H 'sec-ch-ua-platform: "macOS"' \
+            -H 'sec-fetch-dest: document' \
+            -H 'sec-fetch-mode: navigate' \
+            -H 'sec-fetch-site: same-origin' \
+            -H 'sec-fetch-user: ?1' \
+            -H 'upgrade-insecure-requests: 1' \
+            -H 'user-agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Whale/3.24.223.24 Safari/537.36' \
+            --compressed
