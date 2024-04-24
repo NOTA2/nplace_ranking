@@ -31,7 +31,6 @@ async function scraper(myPlace, keyword, result) {
         const dataRanks = dataResponse.data.result.place.list;
 
         const browser = await puppeteer.launch({
-            headless: false,
             args: ['--lang=ko-KR,ko']
         });
         const page = await browser.newPage();
