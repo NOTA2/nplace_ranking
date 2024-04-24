@@ -14,7 +14,7 @@
 </head>
 <body>
     <div class="ui" style="padding:1rem">
-        <h1>nPlace-Ranking</h1>
+        <h1 style="margin-bottom: 1rem">nPlace-Ranking</h1>
         <div id="result" class="ui grid"></div>
     </div>
 
@@ -64,7 +64,6 @@
 
             container.innerHTML = `
                 <h2 class="ui header">내 가게 : ${result.myPlace}</h2>
-                <h3 class="ui header">업데이트 시각 : ${getFormattedDate(new Date(result.lastUpdateTime))}</h3>
                 <table class="ui unstackable table">
                     <thead>
                         <tr>
@@ -78,6 +77,7 @@
                         ${getRanking(result.keywords)}
                     </tbody>
                   </table>
+                <h3 class="ui header">업데이트 시각 : ${getFormattedDate(new Date(result.lastUpdateTime))}</h3>
             `
         }
 
