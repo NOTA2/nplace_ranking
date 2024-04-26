@@ -27,7 +27,7 @@ const requestHeaders = {
 
 async function scraper(myPlace, keyword, result) {
     try {
-        const dataResponse = await axios.get(encodeURI('https://map.naver.com/p/api/search/allSearch?query=' + keyword + '&type=all&searchCoord='));
+        const dataResponse = await axios.get(encodeURI(`https://map.naver.com/p/api/search/allSearch?query=${keyword}&type=all&searchCoord=`));
         const dataRanks = dataResponse.data.result.place.list;
 
         const browser = await puppeteer.launch({

@@ -18,6 +18,8 @@
             <i class="circular trophy icon"></i>
             nPlace-Ranking
         </h2>
+        <script type="text/javascript" src="https://static.nid.naver.com/js/naveridlogin_js_sdk_2.0.0.js"charset="utf-8"></script>
+
         <div id="result" class="ui"></div>
     </div>
 
@@ -57,7 +59,7 @@
                   <td>${k.name}</td>
                   <td>${k.dataRank ? getRankingString(k.dataRank) : '20위 밖🥲'}</td>
                   <td>${k.viewRankWithAd ? getRankingString(k.viewRankWithAd) : '10위 밖🥲'}</td>
-                  <td>${k.viewAdCount}건</td>
+<!--                  <td>${k.viewAdCount}건</td>-->
                 </tr>
             `).join('')
         }
@@ -77,7 +79,7 @@
                           <th scope="col">키워드</th>
                           <th scope="col">데이터 순위</th>
                           <th scope="col">노출 순위</th>
-                          <th scope="col">광고 개수</th>
+<!--                          <th scope="col">광고 개수</th>-->
                         </tr>
                     </thead>
                     <tbody>
