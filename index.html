@@ -13,72 +13,81 @@
     <link href="https://cdn.jsdelivr.net/npm/semantic-ui@2.5.0/dist/semantic.min.css" rel="stylesheet">
 </head>
 <body>
-    <div class="ui" style="padding:1rem">
-        <h2 class="ui center aligned icon header">
-            <i class="circular trophy icon"></i>
-            nPlace-Ranking
-        </h2>
-        <script type="text/javascript" src="https://static.nid.naver.com/js/naveridlogin_js_sdk_2.0.0.js"charset="utf-8"></script>
+<div class="ui" style="padding:1rem">
+    <h2 class="ui center aligned icon header">
+        <i class="circular trophy icon"></i>
+        nPlace-Ranking
+    </h2>
+    <script type="text/javascript" src="https://static.nid.naver.com/js/naveridlogin_js_sdk_2.0.0.js" charset="utf-8"></script>
 
-        <div id="result" class="ui"></div>
-    </div>
+    <div id="place-list" class="ui tabular menu"></div>
+    <div id="result" class="ui"></div>
+</div>
 
-    <script>
-        function loadItem() {
-            return fetch('./json/엘바노헤어.json')
-                .then((response) => response.json())
+<script>
+    const myPlace = ['엘바노헤어 오산대역점', '엘바노헤어 오산궐동점'];
+
+    function loadItem(myPlace) {
+        return fetch(`./json/${myPlace.replace(/\s+/g, '')}.json`)
+            .then((response) => response.json())
+    }
+
+    // 0을 추가하는 보조 함수입니다.
+    function addZero(num) {
+        return (num < 10 ? '0' : '') + num;
+    }
+
+    function getFormattedDate(d) {
+        return d.getFullYear() + '-' +
+            addZero((d.getMonth() + 1)) + '-' +
+            addZero(d.getDate()) + ' ' +
+            addZero(d.getHours()) + ':' +
+            addZero(d.getMinutes()) + ':' +
+            addZero(d.getSeconds());
+    }
+
+    function getRankingString(rank) {
+        let str = rank + '위'
+        switch (parseInt(rank)) {
+            case 1 :
+                str = '🥇';
+                break
+            case 2 :
+                str = '🥈';
+                break
+            case 3 :
+                str = '🥉';
+                break
         }
+        return str;
+    }
 
-        // 0을 추가하는 보조 함수입니다.
-        function addZero(num) {
-            return (num < 10 ? '0' : '') + num;
-        }
+    function getViewRanking(rank, adCount) {
+        return getRankingString(rank) + (adCount > 0 ? `(광고: ${adCount}건)` : '');
+    }
 
-        function getFormattedDate(d) {
-            return d.getFullYear() + '-' + 
-                addZero((d.getMonth() + 1)) + '-' + 
-                addZero(d.getDate()) + ' ' + 
-                addZero(d.getHours()) + ':' + 
-                addZero(d.getMinutes()) + ':' + 
-                addZero(d.getSeconds());
-        }
-
-        function getRankingString(rank) {
-            let str = rank + '위'
-            switch (parseInt(rank)) {
-                case 1 : str = '🥇'; break
-                case 2 : str = '🥈'; break
-                case 3 : str = '🥉'; break
-            }
-            return str;
-        }
-
-        function getRanking(keyword) {
-            return keyword.map(k => `
+    function getRanking(keyword) {
+        return keyword.map(k => `
                 <tr>
                   <td>${k.name}</td>
                   <td>${k.dataRank ? getRankingString(k.dataRank) : '20위 밖🥲'}</td>
-                  <td>${k.viewRankWithAd ? getRankingString(k.viewRankWithAd) : '10위 밖🥲'}</td>
+                  <td>${k.viewRankWithAd ? getViewRanking(k.viewRankWithAd, k.viewAdCount) : '10위 밖🥲'}</td>
 <!--                  <td>${k.viewAdCount}건</td>-->
                 </tr>
             `).join('')
-        }
+    }
 
-        function displayItem(result) {
-            const container = document.getElementById('result');
+    function displayItem(result) {
+        const container = document.getElementById('result');
 
-            container.innerHTML = `
-                <div class="ui tabular menu">
-                  <a class="item active">
-                    ${result.myPlace}
-                  </a>
-                </div>
+        container.innerHTML = `
+                <div id="view-info"></div>
                 <table class="ui unstackable table">
                     <thead>
                         <tr>
                           <th scope="col">키워드</th>
                           <th scope="col">데이터 순위</th>
-                          <th scope="col">노출 순위</th>
+                          <th scope="col">노출 순위 <i class="info circle icon" onClick="toggleInfo()"></i></th>
 <!--                          <th scope="col">광고 개수</th>-->
                         </tr>
                     </thead>
@@ -92,11 +101,49 @@
                   </span>
                 </div>
             `
-        }
+    }
 
-        loadItem().then(result => {
-            displayItem(result)
-        })
-    </script>
+    function toggleInfo() {
+        const viewInfo = document.getElementById('view-info');
+        const viewInfoMessage = document.getElementById('view-info-message');
+
+        if(_.isNull(viewInfoMessage)) {
+            viewInfo.innerHTML = `
+            <div id="view-info-message" class="ui pointing below label">
+              광고가 있는 경우 광고 갯수 표시<br>
+              다만 현재 광고갯수 데이터가 정상적으로 업데이트 되지 않음.
+            </div>
+            `
+        } else {
+            viewInfo.innerHTML = ``
+        }
+    }
+
+    function getMyPlace() {
+        let mp = new URLSearchParams(location.search).get('myPlace');
+        mp = _.isNull(mp) ? '엘바노헤어 오산대역점' : mp;
+        return mp.replace(/\s+/g, '');
+    }
+
+    function displayMenu(myPlace) {
+        const container = document.getElementById('place-list');
+
+        container.innerHTML += `
+              <a class="item ${getMyPlace() === myPlace.replace(/\s+/g, '') ? 'active' : ''}" href="?myPlace=${myPlace.replace(/\s+/g, '')}">
+                ${myPlace}
+              </a>
+            `
+    }
+
+    // myPlace 리스트 출력
+    for (let mp of myPlace) {
+        displayMenu(mp)
+    }
+
+    // 키워드별 순위 출력
+    loadItem(getMyPlace()).then(result => {
+        displayItem(result)
+    })
+</script>
 </body>
 </html>

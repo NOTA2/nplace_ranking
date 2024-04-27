@@ -6,7 +6,10 @@ const _ = require('lodash');
 const puppeteer = require('puppeteer');
 
 const searchItems = [{
-    myPlace: '엘바노헤어',
+    myPlace: '엘바노헤어 오산대역점',
+    keywords: ['오산미용실', '궐동미용실', '오산대역미용실', '세교미용실']
+}, {
+    myPlace: '엘바노헤어 오산궐동점',
     keywords: ['오산미용실', '궐동미용실', '오산대역미용실', '세교미용실']
 }];
 
@@ -69,7 +72,7 @@ async function scraper(myPlace, keyword, result) {
             viewAdCount: $(viewData).find(`.place_ad_label_icon`).length
         });
 
-        await fs.writeFileSync(path.join(__dirname + '/json', myPlace + '.json'), JSON.stringify(result, null, 4));
+        await fs.writeFileSync(path.join(__dirname + '/json', myPlace.replace(/\s+/g, '') + '.json'), JSON.stringify(result, null, 4));
 
         await page.close();
         await browser.close();
