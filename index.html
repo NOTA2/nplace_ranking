@@ -10,10 +10,25 @@
             crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.5.0/dist/semantic.min.js"></script>
+    <script type="text/javascript" src="https://static.nid.naver.com/js/naverLogin_implicit-1.0.3.js" charset="utf-8"></script>
     <link href="https://cdn.jsdelivr.net/npm/semantic-ui@2.5.0/dist/semantic.min.css" rel="stylesheet">
 </head>
 <body>
 <div class="ui" style="padding:1rem">
+
+    <!-- 네이버 로그인 버튼 노출 영역 -->
+    <div id="naver_id_login"></div>
+    <!-- //네이버 로그인 버튼 노출 영역 -->
+    <script type="text/javascript">
+        var naver_id_login = new naver_id_login("dOH3Lf9nLMjiuP8x2B0r", "https://" + window.location.hostname + ((location.port==""||location.port==undefined)?"":":" + location.port) + "/login.html");
+        var state = naver_id_login.getUniqState();
+        naver_id_login.setButton("white", 2,40);
+        naver_id_login.setDomain("YOUR_SERVICE_URL");
+        naver_id_login.setState(state);
+        naver_id_login.setPopup();
+        naver_id_login.init_naver_id_login();
+    </script>
+
     <h2 class="ui center aligned icon header">
         <i class="circular trophy icon"></i>
         nPlace-Ranking
@@ -28,7 +43,7 @@
     const myPlace = ['엘바노헤어 오산대역점', '엘바노헤어 오산궐동점'];
 
     function loadItem(myPlace) {
-        return fetch(`./json/${myPlace.replace(/\s+/g, '')}.json`)
+        return fetch(`./json/${myPlace.replace(/\s+/g, '')}.json`, {mode: 'no-cors'})
             .then((response) => response.json())
     }
 
