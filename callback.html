@@ -41,6 +41,7 @@ callback 처리중입니다. 이 페이지에서는 callback을 처리하고 바
                 var redirect = "https://" + window.location.hostname + ( (location.port==""||location.port==undefined)?"":":" + location.port + '/nplace_ranking');
                 if (opener) {
                     opener.location.replace(redirect + location.hash);
+                    alert(redirect + location.hash)
                     opener.location.reload();
                     window.close();
                 } else {

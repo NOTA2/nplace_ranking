@@ -92,6 +92,9 @@
             naverLogin.logout();
             location.replace('/nplace_ranking');
         });
+
+        // token 저장
+        // localStorage.setItem('access_token', token)
     }
 
     // nplace-ranking
@@ -174,10 +177,6 @@
     function getMyPlace() {
         let mp = new URLSearchParams(location.search).get('myPlace');
         return _.isNull(mp) ? '엘바노헤어 오산대역점' : mp;
-    }
-
-    function getMyPlaceNoSpace() {
-        return getMyPlace();
     }
 
     function displayMenu(myPlace) {
