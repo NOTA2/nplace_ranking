@@ -25,10 +25,8 @@
     <div class="ui divider"></div>
 
     <!-- 네이버 로그인 버튼 노출 영역 -->
-    <div id="naverloginBlock" class="ui center aligned" style="display:none;">
-        <p>
-            <div id="naverIdLogin"><a id="naverIdLogin_loginButton" href="#" role="button"><img src="https://static.nid.naver.com/oauth/big_g.PNG" width=320></a></div>
-        </p>
+    <div id="naverIdLogin" class="ui center aligned" style="display:none;">
+        <a id="naverIdLogin_loginButton" href="#" role="button"><img src="https://static.nid.naver.com/oauth/big_g.PNG" width=320></a>
     </div>
 
     <div id="main" class="ui" style="display:none;">
@@ -58,7 +56,7 @@
         {
             clientId: "dOH3Lf9nLMjiuP8x2B0r",
             callbackUrl: `https://${window.location.hostname}/nplace_ranking/callback.html`,
-            isPopup: true,
+            isPopup: false,
             loginButton: {color: "green", type: 3, height: 60}
         }
     );
@@ -70,11 +68,11 @@
         naverLogin.getLoginStatus(function (status) {
             if (status) {
                 /* (6) 로그인 상태가 "true" 인 경우 로그인 버튼을 없애고 사용자 정보를 출력합니다. */
-                $("#naverloginBlock").css('display', 'none');
+                $("#naverIdLogin").css('display', 'none');
                 $("#main").css('display', 'block');
                 setLoginStatus();
             } else {
-                $("#naverloginBlock").css('display', 'block');
+                $("#naverIdLogin").css('display', 'block');
             }
         });
     });
