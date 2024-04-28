@@ -37,13 +37,10 @@ callback 처리중입니다. 이 페이지에서는 callback을 처리하고 바
                 } else {
                     opener = window.open('', 'opener');
                 }
-                alert(opener)
 
                 var redirect = `https://${window.location.hostname}/nplace_ranking`;
                 if (opener) {
                     opener.location.replace(redirect + location.hash);
-                    // opener.location.reload();
-                    alert(redirect + location.hash)
                     window.close();
                 } else {
                     window.location.replace(redirect);
