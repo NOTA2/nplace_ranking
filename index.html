@@ -32,19 +32,20 @@
     </div>
 
     <div id="main" class="ui" style="display:none;">
-        <div class="ui top menu">
-            <div class="ui dropdown item">
-                내 가게
-                <i class="dropdown icon"></i>
-                <div id="place-list" class="menu">
-                    <a class="item">test</a>
+        <div class="ui menu">
+            <a id="currentMyPlace" class="active item"></a>
+            <div class="right menu">
+                <div class="ui dropdown item">
+                    내 가게 <i class="dropdown icon"></i>
+                    <div id="place-list" class="menu">
+                        <a class="item">English</a>
+                        <a class="item">Russian</a>
+                        <a class="item">Spanish</a>
+                    </div>
                 </div>
-            </div>
-            <div class="item">
-                <div id="currentMyPlace" class="header"></div>
-            </div>
-                <div class="right item">
-                <a id="logout" class="ui red button">Logout</a>
+                <div class="item">
+                    <a id="logout" class="ui red button">Logout</a>
+                </div>
             </div>
         </div>
         <div id="result" class="ui"></div>
@@ -196,7 +197,8 @@
         // myPlace 리스트 출력
         displayMenu(myPlace);
 
-        $("#currentMyPlace").text = getMyPlace();
+        const currentMyPlace = document.getElementById('currentMyPlace');
+        currentMyPlace.innerHTML = getMyPlace();
 
         // 키워드별 순위 출력
         loadItem(getMyPlace()).then(result => {
