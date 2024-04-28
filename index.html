@@ -29,7 +29,7 @@
 </div>
 
 <!-- LoginWithNaverId Javscript SDK -->
-<script src="/js/naveridlogin_js_sdk_2.0.2.js"></script>
+<script src="/nplace_ranking/js/naveridlogin_js_sdk_2.0.2.js"></script>
 
 <script>
 
@@ -37,7 +37,7 @@
     var naverLogin = new naver.LoginWithNaverId(
         {
             clientId: "dOH3Lf9nLMjiuP8x2B0r",
-            callbackUrl: "https://" + window.location.hostname + ((location.port==""||location.port==undefined)?"":":" + location.port) + "/callback.html",
+            callbackUrl: "https://" + window.location.hostname + ((location.port==""||location.port==undefined)?"":":" + location.port) + "/nplace_ranking/callback.html",
             isPopup: true,
             loginButton: {color: "green", type: 3, height: 60}
         }
@@ -74,7 +74,7 @@
         $("#gnbLogin").click(function (e) {
             e.preventDefault();
             naverLogin.logout();
-            location.replace('/');
+            location.replace('/nplace_ranking');
         });
     }
 
