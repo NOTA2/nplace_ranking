@@ -24,26 +24,26 @@ jobs:
         cache: 'npm'
     - run: npm ci
     - run: npm run build --if-present
-    - name: Install Open VPN
-      run: sudo apt-get install openvpn
-    - name: Connect VPN
-      uses: golfzaptw/action-connect-ovpn@master
-      id: connect_vpn
-      with:
-        PING_URL: '127.0.0.1'
-        FILE_OVPN: '.github/vpn/config.ovpn'
-      env:
-        CA_CRT: ${{ secrets.CA_CRT}}
-        USER_CRT: ${{ secrets.USER_CRT }}
-        USER_KEY: ${{ secrets.USER_KEY }}
-    - name: Check Connect VPN
-      run: echo ${{ steps.connect_vpn.outputs.STATUS }}
+#    - name: Install Open VPN
+#      run: sudo apt-get install openvpn
+#    - name: Connect VPN
+#      uses: golfzaptw/action-connect-ovpn@master
+#      id: connect_vpn
+#      with:
+#        PING_URL: '127.0.0.1'
+#        FILE_OVPN: '.github/vpn/config.ovpn'
+#      env:
+#        CA_CRT: ${{ secrets.CA_CRT}}
+#        USER_CRT: ${{ secrets.USER_CRT }}
+#        USER_KEY: ${{ secrets.USER_KEY }}
+#    - name: Check Connect VPN
+#      run: echo ${{ steps.connect_vpn.outputs.STATUS }}
     - name: Run Scraper with node
       run: |
         node scrape.js
-    - name: kill vpn
-      if: always()
-      run: sudo killall openvpn
+#    - name: kill vpn
+#      if: always()
+#      run: sudo killall openvpn
     - name: Commits
       run: |
         git config --local user.email "skaska121212@gmail.com"
