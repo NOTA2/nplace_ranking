@@ -26,7 +26,7 @@
 
     <!-- 네이버 로그인 버튼 노출 영역 -->
     <div id="naverIdLogin" class="ui center aligned" style="display:none;">
-        <a id="naverIdLogin_loginButton" href="#" role="button"><img src="https://static.nid.naver.com/oauth/big_g.PNG" width=320></a>
+        <a id="naverIdLogin_loginButton" href="#"></a>
     </div>
 
     <div id="main" class="ui" style="display:none;">
@@ -56,8 +56,8 @@
         {
             clientId: "dOH3Lf9nLMjiuP8x2B0r",
             callbackUrl: `https://${window.location.hostname}/nplace_ranking/callback.html`,
-            isPopup: false,
-            loginButton: {color: "green", type: 3, height: 60}
+            isPopup: true,
+            loginButton: {color: "green", type: 3, height: 50}
         }
     );
     /* (4) 네아로 로그인 정보를 초기화하기 위하여 init을 호출 */
