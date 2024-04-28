@@ -10,21 +10,19 @@
             crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.5.0/dist/semantic.min.js"></script>
-    <script type="text/javascript" src="https://static.nid.naver.com/js/naverLogin_implicit-1.0.3.js" charset="utf-8"></script>
     <link href="https://cdn.jsdelivr.net/npm/semantic-ui@2.5.0/dist/semantic.min.css" rel="stylesheet">
 </head>
 <body>
 <div class="ui" style="padding:1rem">
-    <!-- 네이버 로그인 버튼 노출 영역 -->
-    <p>
-        <div id="naverIdLogin"><a id="naverIdLogin_loginButton" href="#" role="button"><img src="https://static.nid.naver.com/oauth/big_g.PNG" width=320></a></div>
-    </p>
 
     <h2 class="ui center aligned icon header">
         <i class="circular trophy icon"></i>
         nPlace-Ranking
     </h2>
-    <script type="text/javascript" src="https://static.nid.naver.com/js/naveridlogin_js_sdk_2.0.0.js" charset="utf-8"></script>
+    <!-- 네이버 로그인 버튼 노출 영역 -->
+    <p>
+    <div id="naverIdLogin"><a id="naverIdLogin_loginButton" href="#" role="button"><img src="https://static.nid.naver.com/oauth/big_g.PNG" width=320></a></div>
+    </p>
 
     <div id="place-list" class="ui tabular menu"></div>
     <div id="result" class="ui"></div>
