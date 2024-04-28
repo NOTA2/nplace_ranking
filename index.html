@@ -95,7 +95,8 @@
 
         // token 저장
         if (window.location.href.includes('access_token')) {
-            let token = naverLogin.getAccessTokenInfo()
+            console.log(naverLogin)
+            let token = naverLogin.access_token
             naverLogin.setAccessTokenToLocal()
             console.log(token)
             localStorage.setItem('access_token', token)
