@@ -23,18 +23,19 @@
     <div class="ui horizontal divider"></div>
 
     <!-- 네이버 로그인 버튼 노출 영역 -->
-    <div class="ui center aligned">
+    <div id="naverloginBlock" class="ui center aligned" style="display:none;">
         <p>
             <div id="naverIdLogin"><a id="naverIdLogin_loginButton" href="#" role="button"><img src="https://static.nid.naver.com/oauth/big_g.PNG" width=320></a></div>
         </p>
     </div>
 
-    <div id="result" class="ui">
+    <div id="main" class="ui" style="display:none;">
         <div class="ui">
-            <div id="naverIdLogin_login" class="ui left floated"></div>
+            <div id="user" class="ui left floated"></div>
             <div id="logout" class="ui right floated"></div>
         </div>
         <div id="place-list" class="ui tabular menu"></div>
+        <div id="result" class="ui"></div>
     </div>
 </div>
 
@@ -60,7 +61,11 @@
         naverLogin.getLoginStatus(function (status) {
             if (status) {
                 /* (6) 로그인 상태가 "true" 인 경우 로그인 버튼을 없애고 사용자 정보를 출력합니다. */
+                $("#naverloginBlock").css('display', 'none');
+                $("#main").css('display', 'block');
                 setLoginStatus();
+            } else {
+                $("#naverloginBlock").css('display', 'block');
             }
         });
     });
@@ -69,7 +74,8 @@
     function setLoginStatus() {
         display()
         var name = naverLogin.user.getName();
-        $("#naverIdLogin_login").html(name + '님 반갑습니다.</p>');
+        $("#naverIdLogin_loginButton").html('');
+        $("#user").html(name + '님 반갑습니다.</p>');
         $("#logout").html("Logout");
         $("#logout").attr("href", "#");
         /* (7) 로그아웃 버튼을 설정하고 동작을 정의합니다. */
