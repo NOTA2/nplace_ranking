@@ -30,6 +30,8 @@ callback 처리중입니다. 이 페이지에서는 callback을 처리하고 바
     /* (4) Callback의 처리. 정상적으로 Callback 처리가 완료될 경우 main page로 redirect(또는 Popup close) */
     window.addEventListener('load', function () {
         naverLogin.getLoginStatus(function (status) {
+            alert(window.location)
+
             if (status) {
                 var opener = null;
                 if (window.opener) {
