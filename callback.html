@@ -17,7 +17,7 @@ callback 처리중입니다. 이 페이지에서는 callback을 처리하고 바
     var naverLogin = new naver.LoginWithNaverId(
         {
             clientId: "dOH3Lf9nLMjiuP8x2B0r",
-            callbackUrl: "https://" + window.location.hostname + ( (location.port==""||location.port==undefined)?"":":" + location.port) + "/nplace_ranking/callback.html",
+            callbackUrl: `https://${window.location.hostname}/nplace_ranking/callback.html`,
             isPopup: true,
             callbackHandle: true
             /* callback 페이지가 분리되었을 경우에 callback 페이지에서는 callback처리를 해줄수 있도록 설정합니다. */
@@ -38,7 +38,7 @@ callback 처리중입니다. 이 페이지에서는 callback을 처리하고 바
                     opener = window.open('', 'opener');
                 }
 
-                var redirect = "https://" + window.location.hostname + ( (location.port==""||location.port==undefined)?"":":" + location.port + '/nplace_ranking');
+                var redirect = `https://${window.location.hostname}/nplace_ranking`;
                 if (opener) {
                     opener.location.replace(redirect + location.hash);
                     alert(redirect + location.hash)
