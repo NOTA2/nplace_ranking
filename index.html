@@ -14,13 +14,15 @@
 </head>
 <body>
 <div class="ui" style="padding:1rem">
-
-    <h2 class="ui center aligned icon header">
-        <i class="circular trophy icon"></i>
-        nPlace-Ranking
+    <h2 class="ui header">
+        <i class="map marker alternate icon"></i>
+        <div class="content">
+            nPlace-Ranking
+            <div id="user" class="sub header">내 가게 네이버지도 순위 확인</div>
+        </div>
     </h2>
 
-    <div class="ui horizontal divider"></div>
+    <div class="ui divider"></div>
 
     <!-- 네이버 로그인 버튼 노출 영역 -->
     <div id="naverloginBlock" class="ui center aligned" style="display:none;">
@@ -30,13 +32,11 @@
     </div>
 
     <div id="main" class="ui" style="display:none;">
-        <div class="ui">
-            <div id="user" class="ui left"></div>
-            <div class="ui red button right">
-                Logout
+        <div id="place-list" class="ui tabular menu">
+            <div class="right item">
+                <a id="logout" class="ui red button">Logout</a>
             </div>
         </div>
-        <div id="place-list" class="ui tabular menu"></div>
         <div id="result" class="ui"></div>
     </div>
 </div>
@@ -144,13 +144,12 @@
         const container = document.getElementById('result');
 
         container.innerHTML = `
-                <div id="view-info"></div>
                 <table class="ui unstackable table">
                     <thead>
                         <tr>
                           <th scope="col">키워드</th>
                           <th scope="col">데이터 순위</th>
-                          <th scope="col">노출 순위 <i class="info circle icon" onClick="toggleInfo()"></i></th>
+                          <th scope="col">노출 순위 <i class="info circle icon"></i></th>
 <!--                          <th scope="col">광고 개수</th>-->
                         </tr>
                     </thead>
@@ -159,27 +158,10 @@
                     </tbody>
                 </table>
                 <div class="extra content">
-                  <span class="right floated">
-                    <i class="clock outline icon"></i> 업데이트 시각 : ${getFormattedDate(new Date(result.lastUpdateTime))}
-                  </span>
+                  <p><i class="clock outline icon"></i> 업데이트 시각 : ${getFormattedDate(new Date(result.lastUpdateTime))}</p>
+                  <p><i class="info circle icon"></i> 광고가 있는 경우 광고가 포함된 순위 표시. 다만 현재 광고갯수 데이터가 정상적으로 업데이트 되지 않음.</p>
                 </div>
             `
-    }
-
-    function toggleInfo() {
-        const viewInfo = document.getElementById('view-info');
-        const viewInfoMessage = document.getElementById('view-info-message');
-
-        if (_.isNull(viewInfoMessage)) {
-            viewInfo.innerHTML = `
-            <div id="view-info-message" class="ui pointing below label">
-              광고가 있는 경우 광고 갯수 표시<br>
-              다만 현재 광고갯수 데이터가 정상적으로 업데이트 되지 않음.
-            </div>
-            `
-        } else {
-            viewInfo.innerHTML = ``
-        }
     }
 
     function getMyPlace() {
@@ -190,19 +172,22 @@
 
     function displayMenu(myPlace) {
         const container = document.getElementById('place-list');
+        let menuList = ''
 
-        container.innerHTML += `
+        for (let mp of myPlace) {
+            menuList += `
               <a class="item ${getMyPlace() === myPlace.replace(/\s+/g, '') ? 'active' : ''}" href="?myPlace=${myPlace.replace(/\s+/g, '')}">
                 ${myPlace}
               </a>
             `
+        }
+
+        container.innerHTML = menuList + container.innerHTML
     }
 
     function display(user) {
         // myPlace 리스트 출력
-        for (let mp of myPlace) {
-            displayMenu(mp)
-        }
+        displayMenu(myPlace)
 
         // 키워드별 순위 출력
         loadItem(getMyPlace()).then(result => {
