@@ -15,19 +15,10 @@
 </head>
 <body>
 <div class="ui" style="padding:1rem">
-
     <!-- 네이버 로그인 버튼 노출 영역 -->
-    <div id="naver_id_login"></div>
-    <!-- //네이버 로그인 버튼 노출 영역 -->
-    <script type="text/javascript">
-        var naver_id_login = new naver_id_login("dOH3Lf9nLMjiuP8x2B0r", "https://" + window.location.hostname + ((location.port==""||location.port==undefined)?"":":" + location.port) + "/login.html");
-        var state = naver_id_login.getUniqState();
-        naver_id_login.setButton("white", 2,40);
-        naver_id_login.setDomain("YOUR_SERVICE_URL");
-        naver_id_login.setState(state);
-        naver_id_login.setPopup();
-        naver_id_login.init_naver_id_login();
-    </script>
+    <p>
+        <div id="naverIdLogin"><a id="naverIdLogin_loginButton" href="#" role="button"><img src="https://static.nid.naver.com/oauth/big_g.PNG" width=320></a></div>
+    </p>
 
     <h2 class="ui center aligned icon header">
         <i class="circular trophy icon"></i>
@@ -39,7 +30,58 @@
     <div id="result" class="ui"></div>
 </div>
 
+<!-- LoginWithNaverId Javscript SDK -->
+<script src="/js/naveridlogin_js_sdk_2.0.2.js"></script>
+
 <script>
+
+    window.name='opener';
+    var naverLogin = new naver.LoginWithNaverId(
+        {
+            clientId: "dOH3Lf9nLMjiuP8x2B0r",
+            callbackUrl: "https://" + window.location.hostname + ((location.port==""||location.port==undefined)?"":":" + location.port) + "/callback.html",
+            isPopup: true,
+            loginButton: {color: "green", type: 3, height: 60}
+        }
+    );
+    /* (4) 네아로 로그인 정보를 초기화하기 위하여 init을 호출 */
+    naverLogin.init();
+
+    /* (4-1) 임의의 링크를 설정해줄 필요가 있는 경우 */
+    $("#gnbLogin").attr("href", naverLogin.generateAuthorizeUrl());
+
+    /* (5) 현재 로그인 상태를 확인 */
+    window.addEventListener('load', function () {
+        naverLogin.getLoginStatus(function (status) {
+            if (status) {
+                /* (6) 로그인 상태가 "true" 인 경우 로그인 버튼을 없애고 사용자 정보를 출력합니다. */
+                setLoginStatus();
+            }
+        });
+    });
+
+    /* (6) 로그인 상태가 "true" 인 경우 로그인 버튼을 없애고 사용자 정보를 출력합니다. */
+    function setLoginStatus() {
+        display()
+        var profileImage = naverLogin.user.getProfileImage();
+        var nickName = naverLogin.user.getNickName();
+        var imageViewer = '';
+        if (profileImage) {
+            imageViewer += '<br><br><img src="' + profileImage + '" height=50 /> <p>';
+        }
+        $("#naverIdLogin_loginButton").html(imageViewer + nickName + '님 반갑습니다.</p>');
+        $("#gnbLogin").html("Logout");
+        $("#gnbLogin").attr("href", "#");
+        /* (7) 로그아웃 버튼을 설정하고 동작을 정의합니다. */
+        $("#gnbLogin").click(function (e) {
+            e.preventDefault();
+            naverLogin.logout();
+            location.replace('/');
+        });
+    }
+
+
+
     const myPlace = ['엘바노헤어 오산대역점', '엘바노헤어 오산궐동점'];
 
     function loadItem(myPlace) {
@@ -122,7 +164,7 @@
         const viewInfo = document.getElementById('view-info');
         const viewInfoMessage = document.getElementById('view-info-message');
 
-        if(_.isNull(viewInfoMessage)) {
+        if (_.isNull(viewInfoMessage)) {
             viewInfo.innerHTML = `
             <div id="view-info-message" class="ui pointing below label">
               광고가 있는 경우 광고 갯수 표시<br>
@@ -150,15 +192,17 @@
             `
     }
 
-    // myPlace 리스트 출력
-    for (let mp of myPlace) {
-        displayMenu(mp)
-    }
+    function display() {
+        // myPlace 리스트 출력
+        for (let mp of myPlace) {
+            displayMenu(mp)
+        }
 
-    // 키워드별 순위 출력
-    loadItem(getMyPlace()).then(result => {
-        displayItem(result)
-    })
+        // 키워드별 순위 출력
+        loadItem(getMyPlace()).then(result => {
+            displayItem(result)
+        })
+    }
 </script>
 </body>
 </html>
