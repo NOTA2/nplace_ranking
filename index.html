@@ -92,7 +92,10 @@
         });
 
         // token 저장
-        // localStorage.setItem('access_token', token)
+        if (window.location.href.includes('access_token')) {
+            let token = window.location.hash.slice(1).split('=')[1].split('&')[0]
+            localStorage.setItem('access_token', token)
+        }
     }
 
     // nplace-ranking
