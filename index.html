@@ -37,11 +37,7 @@
             <div class="right menu">
                 <div class="ui dropdown item">
                     내 가게 <i class="dropdown icon"></i>
-                    <div id="place-list" class="menu">
-                        <a class="item">English</a>
-                        <a class="item">Russian</a>
-                        <a class="item">Spanish</a>
-                    </div>
+                    <div id="place-list" class="menu"></div>
                 </div>
                 <div class="item">
                     <a id="logout" class="ui red button">Logout</a>
@@ -102,7 +98,7 @@
     const myPlace = ['엘바노헤어 오산대역점', '엘바노헤어 오산궐동점'];
 
     function loadItem(myPlace) {
-        return fetch(`./json/${myPlace.replace(/\s+/g, '')}.json`, {mode: 'no-cors'})
+        return fetch(`./json/${myPlace}.json`, {mode: 'no-cors'})
             .then((response) => response.json())
     }
 
@@ -177,16 +173,22 @@
 
     function getMyPlace() {
         let mp = new URLSearchParams(location.search).get('myPlace');
-        mp = _.isNull(mp) ? '엘바노헤어 오산대역점' : mp;
-        return mp.replace(/\s+/g, '');
+        return _.isNull(mp) ? '엘바노헤어 오산대역점' : mp;
+    }
+
+    function getMyPlaceNoSpace() {
+        return getMyPlace();
     }
 
     function displayMenu(myPlace) {
+        const currentMyPlace = document.getElementById('currentMyPlace');
+        currentMyPlace.innerHTML = getMyPlace();
+
         const container = document.getElementById('place-list');
 
         for (let mp of myPlace) {
             container.innerHTML += `
-              <a class="item ${getMyPlace() === mp.replace(/\s+/g, '') ? 'active' : ''}" href="?myPlace=${mp.replace(/\s+/g, '')}">
+              <a class="item ${getMyPlace() === mp ? 'active' : ''}" href="?myPlace=${mp}">
                 ${mp}
               </a>
             `
@@ -198,9 +200,6 @@
     function display(user) {
         // myPlace 리스트 출력
         displayMenu(myPlace);
-
-        const currentMyPlace = document.getElementById('currentMyPlace');
-        currentMyPlace.innerHTML = getMyPlace();
 
         // 키워드별 순위 출력
         loadItem(getMyPlace()).then(result => {

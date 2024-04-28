@@ -72,7 +72,7 @@ async function scraper(myPlace, keyword, result) {
             viewAdCount: $(viewData).find(`.place_ad_label_icon`).length
         });
 
-        await fs.writeFileSync(path.join(__dirname + '/json', myPlace.replace(/\s+/g, '') + '.json'), JSON.stringify(result, null, 4));
+        await fs.writeFileSync(path.join(__dirname + '/json', myPlace + '.json'), JSON.stringify(result, null, 4));
 
         await page.close();
         await browser.close();
