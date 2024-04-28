@@ -176,13 +176,13 @@
 
         for (let mp of myPlace) {
             menuList += `
-              <a class="item ${getMyPlace() === myPlace.replace(/\s+/g, '') ? 'active' : ''}" href="?myPlace=${myPlace.replace(/\s+/g, '')}">
-                ${myPlace}
+              <a class="item ${getMyPlace() === mp.replace(/\s+/g, '') ? 'active' : ''}" href="?myPlace=${mp.replace(/\s+/g, '')}">
+                ${mp}
               </a>
             `
         }
 
-        container.innerHTML = menuList + container.innerHTML
+        container.innerHTML = menuList + container.innerHTML;
     }
 
     function display(user) {
