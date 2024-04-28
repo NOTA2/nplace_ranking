@@ -19,13 +19,23 @@
         <i class="circular trophy icon"></i>
         nPlace-Ranking
     </h2>
-    <!-- 네이버 로그인 버튼 노출 영역 -->
-    <p>
-    <div id="naverIdLogin"><a id="naverIdLogin_loginButton" href="#" role="button"><img src="https://static.nid.naver.com/oauth/big_g.PNG" width=320></a></div>
-    </p>
 
-    <div id="place-list" class="ui tabular menu"></div>
-    <div id="result" class="ui"></div>
+    <div class="ui horizontal divider"></div>
+
+    <!-- 네이버 로그인 버튼 노출 영역 -->
+    <div class="ui center aligned">
+        <p>
+            <div id="naverIdLogin"><a id="naverIdLogin_loginButton" href="#" role="button"><img src="https://static.nid.naver.com/oauth/big_g.PNG" width=320></a></div>
+        </p>
+    </div>
+
+    <div id="result" class="ui">
+        <div class="ui">
+            <div id="naverIdLogin_login" class="ui left floated"></div>
+            <div id="logout" class="ui right floated"></div>
+        </div>
+        <div id="place-list" class="ui tabular menu"></div>
+    </div>
 </div>
 
 <!-- LoginWithNaverId Javscript SDK -->
@@ -59,20 +69,18 @@
     function setLoginStatus() {
         display()
         var name = naverLogin.user.getName();
-        console.log(naverLogin.user)
-        $("#naverIdLogin_loginButton").html(name + '님 반갑습니다.</p>');
-        $("#gnbLogin").html("Logout");
-        $("#gnbLogin").attr("href", "#");
+        $("#naverIdLogin_login").html(name + '님 반갑습니다.</p>');
+        $("#logout").html("Logout");
+        $("#logout").attr("href", "#");
         /* (7) 로그아웃 버튼을 설정하고 동작을 정의합니다. */
-        $("#gnbLogin").click(function (e) {
+        $("#logout").click(function (e) {
             e.preventDefault();
             naverLogin.logout();
             location.replace('/nplace_ranking');
         });
     }
 
-
-
+    // nplace-ranking
     const myPlace = ['엘바노헤어 오산대역점', '엘바노헤어 오산궐동점'];
 
     function loadItem(myPlace) {
@@ -183,7 +191,7 @@
             `
     }
 
-    function display() {
+    function display(user) {
         // myPlace 리스트 출력
         for (let mp of myPlace) {
             displayMenu(mp)
