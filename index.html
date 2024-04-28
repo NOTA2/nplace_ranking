@@ -32,7 +32,13 @@
     </div>
 
     <div id="main" class="ui" style="display:none;">
-        <div id="place-list" class="ui tabular menu">
+
+        <div class="ui text menu">
+            <div class="ui dropdown item">
+                내 가게
+                <i class="dropdown icon"></i>
+                <div id="place-list" class="menu"></div>
+            </div>
             <div class="right item">
                 <a id="logout" class="ui red button">Logout</a>
             </div>
@@ -172,17 +178,14 @@
 
     function displayMenu(myPlace) {
         const container = document.getElementById('place-list');
-        let menuList = ''
 
         for (let mp of myPlace) {
-            menuList += `
+            container.innerHTML += `
               <a class="item ${getMyPlace() === mp.replace(/\s+/g, '') ? 'active' : ''}" href="?myPlace=${mp.replace(/\s+/g, '')}">
                 ${mp}
               </a>
             `
         }
-
-        container.innerHTML = menuList + container.innerHTML;
     }
 
     function display(user) {
