@@ -81,7 +81,6 @@
 
     /* (6) 로그인 상태가 "true" 인 경우 로그인 버튼을 없애고 사용자 정보를 출력합니다. */
     function setLoginStatus() {
-        display()
         var name = naverLogin.user.getName();
         $("#naverIdLogin_loginButton").html('');
         $("#user").text(`${name}님 반갑습니다.`);
@@ -93,14 +92,10 @@
             location.replace('/nplace_ranking');
         });
 
+        display()
+
         // token 저장
-        if (window.location.href.includes('access_token')) {
-            console.log(naverLogin)
-            let token = naverLogin.access_token
-            naverLogin.setAccessTokenToLocal()
-            console.log(token)
-            localStorage.setItem('access_token', token)
-        }
+        localStorage.setItem('access_token', naverLogin.accessToken.accessToken)
     }
 
     // nplace-ranking
