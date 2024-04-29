@@ -48,7 +48,7 @@
 
 <!-- LoginWithNaverId Javscript SDK -->
 <script src="/nplace_ranking/js/naveridlogin_js_sdk_2.0.2.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script src="/nplace_ranking/js/axios.min.js"></script>
 <script>
     window.name='opener';
     var naverLogin = new naver.LoginWithNaverId(
@@ -93,7 +93,49 @@
         display()
 
         // token 저장
-        localStorage.setItem('access_token', naverLogin.accessToken.accessToken)
+        axios({
+            url: 'https://nid.naver.com/oauth2.0/authorize', // 통신할 웹문서
+            method: 'get', // 통신할 방식
+            params: {
+                'response_type': 'code',
+                'client_id': 'dOH3Lf9nLMjiuP8x2B0r',
+                'state': naverLogin.accessToken.state,
+                'redirect_uri': encodeURI(`https://${window.location.hostname}/nplace_ranking/callback.html`)
+            },
+            headers: { // header
+                'X-Naver-Client-Id': 'dOH3Lf9nLMjiuP8x2B0r',
+                'X-Naver-Client-Secret': 'RwALq9Kyql'
+            }
+        })
+        .then(res => {
+            let code = new URLSearchParams(res.data).get('code')
+
+            axios({
+                url: 'https://nid.naver.com/oauth2.0/token', // 통신할 웹문서
+                method: 'get', // 통신할 방식
+                params: {
+                    'grant_type': 'authorization_code',
+                    'client_id': 'dOH3Lf9nLMjiuP8x2B0r',
+                    'client_secret': 'RwALq9Kyql',
+                    'state': naverLogin.accessToken.state,
+                    'code': code
+                },
+                headers: { // header
+                    'X-Naver-Client-Id': 'dOH3Lf9nLMjiuP8x2B0r',
+                    'X-Naver-Client-Secret': 'RwALq9Kyql'
+                }
+            })
+            .then(res => {
+                const accessToken = res.data.access_token
+                const refresh_token = res.data.refresh_token
+                let expiresIn = new Date()
+                expiresIn.setTime(expiresIn.getTime() + 3600);
+
+                localStorage.setItem('access_token', accessToken)
+                localStorage.setItem('access_token_expires_in', expiresIn.getTime())
+                localStorage.setItem('access_token', refresh_token)
+            })
+        });
     }
 
     function noLoginStatus() {
