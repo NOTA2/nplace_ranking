@@ -52,6 +52,8 @@ async function scraper(myPlace, keyword, result) {
         const content = await page.content();
         const $ = cheerio.load(content);
 
+        await page.tracing.stop()
+
         const viewData = $('#_pcmap_list_scroll_container > ul > li')
         const viewRanks = [];
 
