@@ -37,8 +37,7 @@ async function scraper(myPlace, keyword, result) {
             args: [
                 '--lang=ko-KR,ko',
                 `--no-sandbox`,
-                `--disable-setuid-sandbox`,
-                // '--proxy-server=127.0.0.1:9876'
+                `--disable-setuid-sandbox`
             ]
         });
         const page = await browser.newPage();
@@ -61,6 +60,9 @@ async function scraper(myPlace, keyword, result) {
                 name: $(viewData[i]).find('a > div:nth-child(1) > div > span:nth-child(1)').text()
             })
         }
+
+        console.log(dataRanks);
+        console.log(viewRanks);
 
         result.keywords.push({
             name: keyword,
