@@ -43,15 +43,11 @@ async function scraper(myPlace, keyword, result) {
         const page = await browser.newPage();
         await page.setExtraHTTPHeaders({...requestHeaders});
 
-        await page.tracing.start({ categories: ['devtools.timeline'], path: "./tracing.json" });
+        await page.tracing.start({ categories: ['devtools.timeline'], path: `./${myPlace}_${keyword}.json` });
         await page.goto(encodeURI(`https://pcmap.place.naver.com/place/list?query=${keyword}`));
 
         await page.waitForSelector(`.place_ad_label_icon`, {timeout: 15_000})
             .catch(() => console.log(keyword + ' is no ad'));
-
-        var tracing = JSON.parse(await page.tracing.stop());
-
-        console.log(tracing)
 
         const content = await page.content();
         const $ = cheerio.load(content);
@@ -67,9 +63,9 @@ async function scraper(myPlace, keyword, result) {
             })
         }
 
-        // console.log(`${myPlace} ===== ${keyword}`)
-        // console.log(_.map(dataRanks, d => d.name));
-        // console.log(viewRanks);
+        console.log(`${myPlace} ===== ${keyword}`)
+        console.log(_.map(dataRanks, d => d.name));
+        console.log(viewRanks);
 
         result.keywords.push({
             name: keyword,
