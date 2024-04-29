@@ -158,8 +158,18 @@
                     <thead>
                         <tr>
                           <th scope="col">키워드</th>
-                          <th scope="col">데이터 순위</th>
-                          <th scope="col">노출 순위 <i class="info circle icon"></i></th>
+                          <th scope="col">데이터 순위
+                            <i class="info circle icon popup-icon"></i>
+                            <div class="ui custom popup top left transition hidden">
+                              <a href="https://m.map.naver.com/search2/search.naver" target="_blank">모바일 웹 네이버 지도 검색</a>에서는 해당 순위대로 노출된다.
+                            </div>
+                          </th>
+                          <th scope="col">노출 순위
+                            <i class="info circle icon popup-icon"></i>
+                            <div class="ui custom popup top left transition hidden">
+                              광고가 있는 경우 광고가 포함된 순위.<br>다만 현재 광고갯수 데이터가 정상적으로 업데이트 되지 않음.
+                            </div>
+                          </th>
 <!--                          <th scope="col">광고 개수</th>-->
                         </tr>
                     </thead>
@@ -169,9 +179,14 @@
                 </table>
                 <div class="extra content">
                   <p><i class="clock outline icon"></i> 업데이트 시각 : ${getFormattedDate(new Date(result.lastUpdateTime))}</p>
-                  <p><i class="info circle icon"></i> 광고가 있는 경우 광고가 포함된 순위 표시. 다만 현재 광고갯수 데이터가 정상적으로 업데이트 되지 않음.</p>
                 </div>
             `
+
+        $('.popup-icon')
+            .popup({
+                popup : $('.custom.popup'),
+                on    : 'click'
+            });
     }
 
     function getMyPlace() {
