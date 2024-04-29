@@ -43,7 +43,6 @@ async function scraper(myPlace, keyword, result) {
         const page = await browser.newPage();
         await page.setExtraHTTPHeaders({...requestHeaders});
 
-        await page.tracing.start({ categories: ['devtools.timeline'], path: `./${myPlace}_${keyword}.json` });
         await page.goto(encodeURI(`https://pcmap.place.naver.com/place/list?query=${keyword}`));
 
         await page.waitForSelector(`.place_ad_label_icon`, {timeout: 15_000})
@@ -51,8 +50,6 @@ async function scraper(myPlace, keyword, result) {
 
         const content = await page.content();
         const $ = cheerio.load(content);
-
-        await page.tracing.stop()
 
         const viewData = $('#_pcmap_list_scroll_container > ul > li')
         const viewRanks = [];
@@ -64,9 +61,28 @@ async function scraper(myPlace, keyword, result) {
                 name: $(viewData[i]).find('a > div:nth-child(1) > div > span:nth-child(1)').text()
             })
         }
+        // await page.goto(encodeURI(`https://m.place.naver.com/hairshop/list?ac=1&debug=0&ngn_country=KR&nscs=0&query=${keyword}&rev=37&sm=mtp_hty.top&spq=0&ssc=tab.m.all&where=m&deviceType=mobile&target=mobile&originalQuery=${keyword}&level=bottom&entry=pll`));
+        // await page.goto(encodeURI(`https://m.map.naver.com/search2/search.naver?query=${keyword}`));
+        await page.goto(encodeURI(`https://m.search.naver.com/search.naver?sm=mtp_hty.top&where=m&query=${keyword}`));
 
+        const mContent = await page.content();
+        const $$ = cheerio.load(mContent);
+
+        const mobileData = $$('#place-main-section-root > div > div > ul > li')
+        const mobileRanks = [];
+
+        for (let i = 0; i < mobileData.length; i++) {
+            mobileRanks.push({
+                rank: i + 1,
+                isAd: $(mobileData[i]).find(`.place_ad_label_icon`).length > 0,
+                name: $(mobileData[i]).find('.place_bluelink > span:nth-child(1)').text()
+            })
+        }
+
+        let drank = 1
         console.log(`${myPlace} ===== ${keyword}`)
-        console.log(_.map(dataRanks, d => d.name));
+        console.log(_.map(dataRanks, d => {return {'rank': drank++, 'name': d.name}}));
+        console.log(mobileRanks);
         console.log(viewRanks);
 
         result.keywords.push({
