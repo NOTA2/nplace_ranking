@@ -65,6 +65,9 @@ async function scraper(myPlace, keyword, result) {
         // await page.goto(encodeURI(`https://m.map.naver.com/search2/search.naver?query=${keyword}`));
         await page.goto(encodeURI(`https://m.search.naver.com/search.naver?sm=mtp_hty.top&where=m&query=${keyword}`));
 
+        await page.waitForSelector(`.place_ad_label_icon`, {timeout: 15_000})
+            .catch(() => console.log(keyword + ' is no ad'));
+
         const mContent = await page.content();
         const $$ = cheerio.load(mContent);
 
