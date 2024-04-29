@@ -61,7 +61,8 @@ async function scraper(myPlace, keyword, result) {
             })
         }
 
-        console.log(dataRanks);
+        console.log(`${myPlace} ===== ${keyword}`)
+        console.log(_.map(dataRanks, d => d.name));
         console.log(viewRanks);
 
         result.keywords.push({
