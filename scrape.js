@@ -115,6 +115,5 @@ function delay(ms) {
 
 (async function() {
     await getSearchItem();
-    console.log(searchItems)
-    // await startScraping();
+    await startScraping();
 }());

@@ -90,60 +90,8 @@
             location.replace('/nplace_ranking');
         });
 
-        display()
-
-        // token 저장
-        axios({
-            url: 'https://nid.naver.com/oauth2.0/authorize', // 통신할 웹문서
-            method: 'get', // 통신할 방식
-            params: {
-                'response_type': 'code',
-                'client_id': 'dOH3Lf9nLMjiuP8x2B0r',
-                'state': naverLogin.accessToken.state,
-                'redirect_uri': encodeURI(`https://${window.location.hostname}/nplace_ranking/callback.html`)
-            },
-            headers: { // header
-                'X-Naver-Client-Id': 'dOH3Lf9nLMjiuP8x2B0r',
-                'X-Naver-Client-Secret': 'RwALq9Kyql',
-                "Content-Type": `application/json;charset=UTF-8`,
-                "Access-Control-Allow-Origin": '*',
-                'Access-Control-Allow-Credentials':"true",
-            },
-            withCredentials: true
-        })
-        .then(res => {
-            let code = new URLSearchParams(res.data).get('code')
-
-            axios({
-                url: 'https://nid.naver.com/oauth2.0/token', // 통신할 웹문서
-                method: 'get', // 통신할 방식
-                params: {
-                    'grant_type': 'authorization_code',
-                    'client_id': 'dOH3Lf9nLMjiuP8x2B0r',
-                    'client_secret': 'RwALq9Kyql',
-                    'state': naverLogin.accessToken.state,
-                    'code': code
-                },
-                headers: { // header
-                    'X-Naver-Client-Id': 'dOH3Lf9nLMjiuP8x2B0r',
-                    'X-Naver-Client-Secret': 'RwALq9Kyql',
-                    "Content-Type": `application/json;charset=UTF-8`,
-                    "Access-Control-Allow-Origin": '*',
-                    'Access-Control-Allow-Credentials':"true",
-                },
-                withCredentials: true
-            })
-            .then(res => {
-                const accessToken = res.data.access_token
-                const refresh_token = res.data.refresh_token
-                let expiresIn = new Date()
-                expiresIn.setTime(expiresIn.getTime() + 3600);
-
-                localStorage.setItem('access_token', accessToken)
-                localStorage.setItem('access_token_expires_in', expiresIn.getTime())
-                localStorage.setItem('access_token', refresh_token)
-            })
-        });
+        loadMyPlace()
+            .then((myPlace) => display(myPlace))
     }
 
     function noLoginStatus() {
@@ -151,8 +99,10 @@
         $("#user").text(`내 가게 네이버지도 순위 확인`);
     }
 
-    // nplace-ranking
-    const myPlace = ['엘바노헤어 오산대역점', '엘바노헤어 오산궐동점'];
+    function loadMyPlace() {
+        return fetch(`./json/myPlace.json`, {mode: 'no-cors'})
+            .then((response) => response.json())
+    }
 
     function loadItem(myPlace) {
         return fetch(`./json/${myPlace}.json`, {mode: 'no-cors'})
@@ -241,9 +191,9 @@
             });
     }
 
-    function getMyPlace() {
+    function getMyPlace(myPlace) {
         let mp = new URLSearchParams(location.search).get('myPlace');
-        return _.isNull(mp) ? '엘바노헤어 오산대역점' : mp;
+        return _.isNull(mp) ? myPlace[0] : mp;
     }
 
     function displayMenu(myPlace) {
@@ -263,12 +213,12 @@
         $('.ui.dropdown').dropdown();
     }
 
-    function display(user) {
+    function display(myPlace) {
         // myPlace 리스트 출력
         displayMenu(myPlace);
 
         // 키워드별 순위 출력
-        loadItem(getMyPlace()).then(result => {
+        loadItem(getMyPlace(myPlace)).then(result => {
             displayItem(result)
         })
     }
