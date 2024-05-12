@@ -143,7 +143,7 @@
 
         for (let myPlace of myPlaces) {
             container.innerHTML += `
-              <a class="item ${getMyPlace() === myPlace ? 'active' : ''}" href="?myPlace=${myPlace}">
+              <a class="item ${currentPlace === myPlace ? 'active' : ''}" href="?myPlace=${myPlace}">
                 ${myPlace}
               </a>
             `
