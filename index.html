@@ -24,12 +24,7 @@
 
     <div class="ui divider"></div>
 
-    <!-- 네이버 로그인 버튼 노출 영역 -->
-    <div id="naverIdLogin" class="ui center aligned" style="display:none;">
-        <a id="naverIdLogin_loginButton" href="#"></a>
-    </div>
-
-    <div id="main" class="ui" style="display:none;">
+    <div id="main" class="ui">
         <div class="ui menu">
             <a id="currentMyPlace" class="active item"></a>
             <div class="right menu">
@@ -37,71 +32,12 @@
                     내 가게 <i class="dropdown icon"></i>
                     <div id="place-list" class="menu"></div>
                 </div>
-                <div class="item">
-                    <a id="logout" class="ui red button">Logout</a>
-                </div>
             </div>
         </div>
         <div id="result" class="ui"></div>
     </div>
 </div>
-
-<!-- LoginWithNaverId Javscript SDK -->
-<script src="/nplace_ranking/js/naveridlogin_js_sdk_2.0.2.js"></script>
-<script src="/nplace_ranking/js/axios.min.js"></script>
 <script>
-    window.name='opener';
-    var naverLogin = new naver.LoginWithNaverId(
-        {
-            clientId: "dOH3Lf9nLMjiuP8x2B0r",
-            callbackUrl: `https://${window.location.hostname}/nplace_ranking/callback.html`,
-            isPopup: true,
-            loginButton: {color: "green", type: 3, height: 50}
-        }
-    );
-    /* (4) 네아로 로그인 정보를 초기화하기 위하여 init을 호출 */
-    naverLogin.init();
-
-    /* (5) 현재 로그인 상태를 확인 */
-    window.addEventListener('load', function () {
-        naverLogin.getLoginStatus(function (status) {
-            if (status) {
-                /* (6) 로그인 상태가 "true" 인 경우 로그인 버튼을 없애고 사용자 정보를 출력합니다. */
-                setLoginStatus();
-            } else {
-                noLoginStatus();
-            }
-        });
-    });
-
-    /* (6) 로그인 상태가 "true" 인 경우 로그인 버튼을 없애고 사용자 정보를 출력합니다. */
-    function setLoginStatus() {
-        $("#naverIdLogin").css('display', 'none');
-        $("#main").css('display', 'block');
-
-        var name = naverLogin.user.getName();
-        $("#naverIdLogin_loginButton").html('');
-        $("#user").text(`${name}님 반갑습니다.`);
-        $("#logout").attr("href", "#");
-        /* (7) 로그아웃 버튼을 설정하고 동작을 정의합니다. */
-        $("#logout").click(function (e) {
-            e.preventDefault();
-            naverLogin.logout();
-            location.replace('/nplace_ranking');
-        });
-
-        loadMyPlace()
-            .then((result) => {
-                console.log(result)
-                display(result);
-            })
-    }
-
-    function noLoginStatus() {
-        $("#naverIdLogin").css('display', 'block');
-        $("#user").text(`내 가게 네이버지도 순위 확인`);
-    }
-
     function loadMyPlace() {
         return fetch(`./json/myPlace.json`, {mode: 'no-cors'})
             .then((response) => response.json())
@@ -225,6 +161,12 @@
             displayItem(result)
         })
     }
+
+    loadMyPlace()
+        .then((result) => {
+            console.log(result)
+            display(result);
+        })
 </script>
 </body>
 </html>
