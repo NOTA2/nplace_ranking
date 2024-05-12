@@ -1,32 +1,16 @@
+import { createRequire } from "module";
+const require = createRequire(import.meta.url);
 const axios = require('axios');
 const cheerio = require('cheerio');
 const fs = require('fs');
-const path = require('path');
 const _ = require('lodash');
 const puppeteer = require('puppeteer');
+import { GoogleSpreadsheet } from 'google-spreadsheet';
+import { JWT } from 'google-auth-library'
+import path from 'path';
+const __dirname = path.resolve();
 
-const searchItems = [{
-    myPlace: '엘바노헤어 오산대역점',
-    keywords: ['오산미용실', '궐동미용실', '오산대역미용실', '세교미용실']
-}, {
-    myPlace: '엘바노헤어 오산궐동점',
-    keywords: ['오산미용실', '궐동미용실', '오산대역미용실', '세교미용실']
-}];
-
-const requestHeaders = {
-    "accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7",
-    "accept-language": "ko-KR,ko;q=0.9,en-US;q=0.8,en;q=0.7,ja;q=0.6",
-    "cache-control": "no-cache",
-    "pragma": "no-cache",
-    "sec-ch-ua": "\"Whale\";v=\"3\", \"Not-A.Brand\";v=\"8\", \"Chromium\";v=\"120\"",
-    "sec-ch-ua-mobile": "?0",
-    "sec-ch-ua-platform": "\"macOS\"",
-    "sec-fetch-dest": "document",
-    "sec-fetch-mode": "navigate",
-    "sec-fetch-site": "same-origin",
-    "sec-fetch-user": "?1",
-    "upgrade-insecure-requests": "1"
-};
+const searchItems = [];
 
 async function scraper(myPlace, keyword, result) {
     try {
@@ -41,8 +25,6 @@ async function scraper(myPlace, keyword, result) {
             ]
         });
         const page = await browser.newPage();
-        await page.setExtraHTTPHeaders({...requestHeaders});
-
         await page.goto(encodeURI(`https://pcmap.place.naver.com/place/list?query=${keyword}`));
 
         await page.waitForSelector(`.place_ad_label_icon`, {timeout: 15_000})
@@ -61,32 +43,6 @@ async function scraper(myPlace, keyword, result) {
                 name: $(viewData[i]).find('a > div:nth-child(1) > div > span:nth-child(1)').text()
             })
         }
-        // await page.goto(encodeURI(`https://m.place.naver.com/hairshop/list?ac=1&debug=0&ngn_country=KR&nscs=0&query=${keyword}&rev=37&sm=mtp_hty.top&spq=0&ssc=tab.m.all&where=m&deviceType=mobile&target=mobile&originalQuery=${keyword}&level=bottom&entry=pll`));
-        // await page.goto(encodeURI(`https://m.map.naver.com/search2/search.naver?query=${keyword}`));
-        await page.goto(encodeURI(`https://m.search.naver.com/search.naver?sm=mtp_hty.top&where=m&query=${keyword}`));
-
-        await page.waitForSelector(`.place_ad_label_icon`, {timeout: 15_000})
-            .catch(() => console.log(keyword + ' is no ad'));
-
-        const mContent = await page.content();
-        const $$ = cheerio.load(mContent);
-
-        const mobileData = $$('#place-main-section-root > div > div > ul > li')
-        const mobileRanks = [];
-
-        for (let i = 0; i < mobileData.length; i++) {
-            mobileRanks.push({
-                rank: i + 1,
-                isAd: $(mobileData[i]).find(`.place_ad_label_icon`).length > 0,
-                name: $(mobileData[i]).find('.place_bluelink > span:nth-child(1)').text()
-            })
-        }
-
-        let drank = 1
-        console.log(`${myPlace} ===== ${keyword}`)
-        console.log(_.map(dataRanks, d => {return {'rank': drank++, 'name': d.name}}));
-        console.log(mobileRanks);
-        console.log(viewRanks);
 
         result.keywords.push({
             name: keyword,
@@ -123,8 +79,42 @@ async function startScraping() {
     }
 }
 
+async function getSearchItem() {
+    // local test 용
+    const content = fs.readFileSync(path.join(__dirname + '/js', 'google-credentials.json'));
+    const credentials = JSON.parse(content);
+
+    const serviceAccountAuth = new JWT({
+        // email: credentials.client_email,
+        // key: credentials.private_key,
+        email: process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL,
+        key: process.env.GOOGLE_PRIVATE_KEY.replace(/\\n/g, "\n"),
+        scopes: [
+            'https://www.googleapis.com/auth/spreadsheets.readonly',
+        ],
+    });
+
+    const doc = new GoogleSpreadsheet('1swKGQKrItJ7J4Use_A5QqmSxbbov4dQp_A_88ya4JsE', serviceAccountAuth);
+
+    await doc.loadInfo(); // loads document properties and worksheets
+    const sheet = doc.sheetsByIndex[0]; // or use `doc.sheetsById[id]` or `doc.sheetsByTitle[title]`
+    const rows = await sheet.getRows();
+    rows.forEach(row => {
+        searchItems.push({
+            myPlace: row.get('내 가게'),
+            keywords: _.tail(row._rawData)
+        })
+    })
+
+    await fs.writeFileSync(path.join(__dirname + '/json', 'myPlace.json'), JSON.stringify(searchItems.map(s => s.myPlace), null, 4));
+}
+
 function delay(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-startScraping();
+(async function() {
+    await getSearchItem();
+    console.log(searchItems)
+    // await startScraping();
+}());
