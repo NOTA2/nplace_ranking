@@ -131,22 +131,20 @@
     }
 
     function getMyPlace(myPlaces) {
-        console.log(myPlaces);
-        console.log(myPlaces[0]);
         let mp = new URLSearchParams(location.search).get('myPlace');
         return _.isNull(mp) ? myPlaces[0] : mp;
     }
 
-    function displayMenu(myPlace) {
+    function displayMenu(myPlaces, currentPlace) {
         const currentMyPlace = document.getElementById('currentMyPlace');
-        currentMyPlace.innerHTML = getMyPlace();
+        currentMyPlace.innerHTML = currentPlace;
 
         const container = document.getElementById('place-list');
 
-        for (let mp of myPlace) {
+        for (let myPlace of myPlaces) {
             container.innerHTML += `
-              <a class="item ${getMyPlace() === mp ? 'active' : ''}" href="?myPlace=${mp}">
-                ${mp}
+              <a class="item ${getMyPlace() === myPlace ? 'active' : ''}" href="?myPlace=${myPlace}">
+                ${myPlace}
               </a>
             `
         }
@@ -155,11 +153,13 @@
     }
 
     function display(myPlaces) {
+        const currentPlace = getMyPlace(myPlaces);
+
         // myPlace 리스트 출력
-        displayMenu(myPlaces);
+        displayMenu(myPlaces, currentPlace);
 
         // 키워드별 순위 출력
-        loadItem(getMyPlace(myPlaces)).then(result => {
+        loadItem(currentPlace).then(result => {
             displayItem(result)
         })
     }
