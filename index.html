@@ -130,9 +130,9 @@
             });
     }
 
-    function getMyPlace(myPlace) {
+    function getMyPlace(myPlaces) {
         let mp = new URLSearchParams(location.search).get('myPlace');
-        return _.isNull(mp) ? myPlace[0] : mp;
+        return _.isNull(mp) ? myPlaces[0] : mp;
     }
 
     function displayMenu(myPlace) {
@@ -152,21 +152,19 @@
         $('.ui.dropdown').dropdown();
     }
 
-    function display(myPlace) {
+    function display(myPlaces) {
+        console.log(myPlaces);
         // myPlace 리스트 출력
-        displayMenu(myPlace);
+        displayMenu(myPlaces);
 
         // 키워드별 순위 출력
-        loadItem(getMyPlace(myPlace)).then(result => {
+        loadItem(getMyPlace(myPlaces)).then(result => {
             displayItem(result)
         })
     }
 
     loadMyPlace()
-        .then((result) => {
-            console.log(result)
-            display(result);
-        })
+        .then((myPlaces) => display(myPlaces))
 </script>
 </body>
 </html>
