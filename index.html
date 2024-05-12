@@ -91,7 +91,10 @@
         });
 
         loadMyPlace()
-            .then((myPlace) => display(myPlace))
+            .then((result) => {
+                console.log(result)
+                display(result);
+            })
     }
 
     function noLoginStatus() {
