@@ -81,8 +81,8 @@ async function startScraping() {
 
 async function getSearchItem() {
     // local test 용
-    const content = fs.readFileSync(path.join(__dirname + '/js', 'google-credentials.json'));
-    const credentials = JSON.parse(content);
+    // const content = fs.readFileSync(path.join(__dirname + '/js', 'google-credentials.json'));
+    // const credentials = JSON.parse(content);
 
     const serviceAccountAuth = new JWT({
         // email: credentials.client_email,
