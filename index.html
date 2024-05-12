@@ -131,6 +131,8 @@
     }
 
     function getMyPlace(myPlaces) {
+        console.log(myPlaces);
+        console.log(myPlaces[0]);
         let mp = new URLSearchParams(location.search).get('myPlace');
         return _.isNull(mp) ? myPlaces[0] : mp;
     }
@@ -153,7 +155,6 @@
     }
 
     function display(myPlaces) {
-        console.log(myPlaces);
         // myPlace 리스트 출력
         displayMenu(myPlaces);
 
