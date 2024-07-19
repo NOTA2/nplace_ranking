@@ -1,11 +1,25 @@
 {
     "myPlace": "엘바노헤어 오산대역점",
-    "lastUpdateTime": "2024-07-19T12:11:09.950Z",
+    "lastUpdateTime": "2024-07-19T14:07:41.509Z",
     "keywords": [
         {
             "name": "오산미용실",
             "dataRank": "2",
             "viewRankWithAd": 2,
+            "viewAdCount": 0
+        },
+        {
+            "name": "오산대역미용실",
+            "dataRank": "1",
+            "viewRankWithAd": 1,
+            "viewAdCount": 0
+        },
+        {
+            "name": "궐동미용실",
+            "viewAdCount": 0
+        },
+        {
+            "name": "세교미용실",
             "viewAdCount": 0
         }
     ]
