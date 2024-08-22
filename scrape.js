@@ -53,7 +53,7 @@ async function scraper(myPlace, keyword, result) {
                 '--lang=ko-KR,ko',
                 `--no-sandbox`,
                 `--disable-setuid-sandbox`,
-                `--proxy-server=${proxyServer}`
+                // `--proxy-server=${proxyServer}`
             ]
         });
         const page = await browser.newPage();
