@@ -25,6 +25,10 @@ const searchItems = [];
 
 async function scraper(myPlace, keyword, result) {
     try {
+        console.log(`=============${keyword}=============`)
+        /**
+         * data Rank
+         */
         const dataResponse = await axios.get(encodeURI(`https://map.naver.com/p/api/search/allSearch?query=${keyword}&type=all&searchCoord=`));
         const dataRanks = _.map(dataResponse.data.result.place.list, item => {
           return {
@@ -34,6 +38,9 @@ async function scraper(myPlace, keyword, result) {
           }
         })
 
+        /**
+         * view Rank
+         */
         const browser = await puppeteer.launch({
             args: [
                 '--lang=ko-KR,ko',
@@ -48,6 +55,7 @@ async function scraper(myPlace, keyword, result) {
             .catch(() => console.log(keyword + ' is no ad'));
 
         const content = await page.content();
+        console.log(content)
         const $ = cheerio.load(content);
 
         const viewData = $('#_pcmap_list_scroll_container > ul > li')
@@ -61,7 +69,6 @@ async function scraper(myPlace, keyword, result) {
             })
         }
 
-        console.log(`=============${keyword}=============`)
         console.log(dataRanks)
         console.log(viewRanks)
 
