@@ -10,12 +10,29 @@ import { JWT } from 'google-auth-library'
 import path from 'path';
 const __dirname = path.resolve();
 
+// local 테스트용
+// const searchItems = [{
+//     "myPlace": "엘바노헤어 오산궐동점",
+//     "lastUpdateTime": "2024-08-22T14:04:18.051Z",
+//     "keywords": ["오산미용실", "오산대역미용실","궐동미용실","세교미용실"]
+// },{
+//     "myPlace": "엘바노헤어 오산대역점",
+//     "lastUpdateTime": "2024-08-22T14:03:02.650Z",
+//     "keywords": ["오산미용실", "오산대역미용실","궐동미용실","세교미용실"]
+// }]
+
 const searchItems = [];
 
 async function scraper(myPlace, keyword, result) {
     try {
         const dataResponse = await axios.get(encodeURI(`https://map.naver.com/p/api/search/allSearch?query=${keyword}&type=all&searchCoord=`));
-        const dataRanks = dataResponse.data.result.place.list;
+        const dataRanks = _.map(dataResponse.data.result.place.list, item => {
+          return {
+              index: item.index,
+              rank: item.rank,
+              name: item.name
+          }
+        })
 
         const browser = await puppeteer.launch({
             args: [
@@ -27,7 +44,7 @@ async function scraper(myPlace, keyword, result) {
         const page = await browser.newPage();
         await page.goto(encodeURI(`https://pcmap.place.naver.com/place/list?query=${keyword}`));
 
-        await page.waitForSelector(`.place_ad_label_icon`, {timeout: 15_000})
+        await page.waitForSelector(`.place_ad_label_icon`, {timeout: 5_000})
             .catch(() => console.log(keyword + ' is no ad'));
 
         const content = await page.content();
@@ -43,6 +60,10 @@ async function scraper(myPlace, keyword, result) {
                 name: $(viewData[i]).find('a > div:nth-child(1) > div > span:nth-child(1)').text()
             })
         }
+
+        console.log(`=============${keyword}=============`)
+        console.log(dataRanks)
+        console.log(viewRanks)
 
         result.keywords.push({
             name: keyword,
@@ -71,6 +92,7 @@ async function startScraping() {
             lastUpdateTime: new Date(),
             keywords: []
         };
+        console.log(`=============${searchItem.myPlace}=============`)
         // 검색어 순차적으로 실행하기
         for (const keyword of searchItem.keywords) {
             await scraper(searchItem.myPlace, keyword, result);
@@ -80,10 +102,6 @@ async function startScraping() {
 }
 
 async function getSearchItem() {
-    // local test 용
-    // const content = fs.readFileSync(path.join(__dirname + '/js', 'google-credentials.json'));
-    // const credentials = JSON.parse(content);
-
     const serviceAccountAuth = new JWT({
         // email: credentials.client_email,
         // key: credentials.private_key,
