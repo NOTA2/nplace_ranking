@@ -10,6 +10,8 @@ import { JWT } from 'google-auth-library'
 import path from 'path';
 const __dirname = path.resolve();
 
+const searchItems = [];
+
 // local 테스트용
 // const searchItems = [{
 //     "myPlace": "엘바노헤어 오산궐동점",
@@ -20,8 +22,6 @@ const __dirname = path.resolve();
 //     "lastUpdateTime": "2024-08-22T14:03:02.650Z",
 //     "keywords": ["오산미용실", "오산대역미용실","궐동미용실","세교미용실"]
 // }]
-
-const searchItems = [];
 
 const proxyServers = ['198.44.255.3:80',
     '133.18.234.13:80'
@@ -57,23 +57,25 @@ async function scraper(myPlace, keyword, result) {
             ]
         });
         const page = await browser.newPage();
-        await page.goto(encodeURI(`https://pcmap.place.naver.com/place/list?query=${keyword}`));
+        // `https://pcmap.place.naver.com/place/list?query=${keyword}`
+        await page.goto(encodeURI(`https://m.map.naver.com/search2/search.naver?query=${keyword}`));
 
         await page.waitForSelector(`.place_ad_label_icon`, {timeout: 5_000})
             .catch(() => console.log(keyword + ' is no ad'));
 
         const content = await page.content();
-        console.log(content)
         const $ = cheerio.load(content);
 
-        const viewData = $('#_pcmap_list_scroll_container > ul > li')
+        // const viewData = $('#_pcmap_list_scroll_container > ul > li')
+        const viewData = $('#ct > div.search_listview._content._ctList > ul > li')
         const viewRanks = [];
 
         for (let i = 0; i < viewData.length; i++) {
             viewRanks.push({
                 rank: i + 1,
-                isAd: $(viewData[i]).find(`.place_ad_label_icon`).length > 0,
-                name: $(viewData[i]).find('a > div:nth-child(1) > div > span:nth-child(1)').text()
+                // isAd: $(viewData[i]).find(`.place_ad_label_icon`).length > 0,
+                // name: $(viewData[i]).find('a > div:nth-child(1) > div > span:nth-child(1)').text()
+                name: $(viewData[i]).find('div.item_info > a.a_item.a_item_distance._linkSiteview > div > strong').text()
             })
         }
 
@@ -87,7 +89,7 @@ async function scraper(myPlace, keyword, result) {
             viewRankWithAd: _.find(viewRanks, (viewRank) => {
                 return _.includes(viewRank.name, myPlace);
             })?.rank,
-            viewAdCount: $(viewData).find(`.place_ad_label_icon`).length
+            // viewAdCount: $(viewData).find(`.place_ad_label_icon`).length
         });
 
         await fs.writeFileSync(path.join(__dirname + '/json', myPlace + '.json'), JSON.stringify(result, null, 4));
