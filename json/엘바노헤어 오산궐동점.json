@@ -1,24 +1,22 @@
 {
     "myPlace": "엘바노헤어 오산궐동점",
-    "lastUpdateTime": "2024-08-22T16:10:46.493Z",
+    "lastUpdateTime": "2024-08-22T16:54:35.991Z",
     "keywords": [
         {
             "name": "궐동미용실",
             "dataRank": "1",
-            "viewAdCount": 0
+            "viewRankWithAd": 1
         },
         {
             "name": "오산미용실",
             "dataRank": "11",
-            "viewAdCount": 0
+            "viewRankWithAd": 11
         },
         {
-            "name": "오산대역미용실",
-            "viewAdCount": 0
+            "name": "오산대역미용실"
         },
         {
-            "name": "세교미용실",
-            "viewAdCount": 0
+            "name": "세교미용실"
         }
     ]
 }
